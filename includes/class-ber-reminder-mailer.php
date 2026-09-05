@@ -19,6 +19,6 @@ class BER_Reminder_Mailer {
 			$reminder['date']
 		);
 
-		return wp_mail( $reminder['email'], $subject, $message );
+		return wp_mail( BER_Reminder_Post_Type::get_emails( $reminder['email'] ), $subject, $message );
 	}
 }

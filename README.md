@@ -5,13 +5,14 @@ Bar Email Reminder is a small WordPress plugin for managing dated email reminder
 ## Features
 
 - Administrator-only reminder overview with add, edit, and delete actions.
-- Reminder fields: Name, Email, Code, and Date.
+- Reminder fields: Name, Email, Code, and Date. Multiple email addresses can be separated with semicolons.
 - Sends a fixed email template exactly two calendar days before Date.
 - Uses the WordPress site's configured timezone.
 - Checks reminders every 30 minutes through WP-Cron.
 - Keeps failed deliveries as `not-sent` so they can be retried.
 - Changes successful deliveries to `sent`.
 - Changes reminders whose send window has passed to `missed`.
+- Includes an administrator button to run the reminder check immediately.
 
 ## Installation
 

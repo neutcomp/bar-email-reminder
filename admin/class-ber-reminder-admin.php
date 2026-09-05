@@ -11,6 +11,7 @@ class BER_Reminder_Admin {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_post_ber_save_reminder', array( __CLASS__, 'save' ) );
 		add_action( 'admin_post_ber_delete_reminder', array( __CLASS__, 'delete' ) );
+		add_action( 'admin_post_ber_run_cron', array( __CLASS__, 'run_cron' ) );
 	}
 
 	public static function menu() {
@@ -53,6 +54,11 @@ class BER_Reminder_Admin {
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Bar Email Reminders', 'bar-email-reminder' ); ?></h1>
 			<?php self::notice(); ?>
+			<p>
+				<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_run_cron' ), 'ber_run_cron' ) ); ?>">
+					<?php esc_html_e( 'Run reminder check now', 'bar-email-reminder' ); ?>
+				</a>
+			</p>
 			<h2><?php echo $editing['id'] ? esc_html__( 'Edit reminder', 'bar-email-reminder' ) : esc_html__( 'Add reminder', 'bar-email-reminder' ); ?></h2>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="ber_save_reminder">
@@ -60,7 +66,7 @@ class BER_Reminder_Admin {
 				<?php wp_nonce_field( 'ber_save_reminder' ); ?>
 				<table class="form-table" role="presentation">
 					<tr><th><label for="ber-name">Name</label></th><td><input required class="regular-text" id="ber-name" name="name" value="<?php echo esc_attr( $editing['name'] ); ?>"></td></tr>
-					<tr><th><label for="ber-email">Email</label></th><td><input required type="email" class="regular-text" id="ber-email" name="email" value="<?php echo esc_attr( $editing['email'] ); ?>"></td></tr>
+					<tr><th><label for="ber-email">Email</label></th><td><input required type="text" class="regular-text" id="ber-email" name="email" value="<?php echo esc_attr( $editing['email'] ); ?>"><p class="description"><?php esc_html_e( 'Separate multiple addresses with semicolons.', 'bar-email-reminder' ); ?></p></td></tr>
 					<tr><th><label for="ber-code">Code</label></th><td><input required class="regular-text" id="ber-code" name="code" value="<?php echo esc_attr( $editing['code'] ); ?>"></td></tr>
 					<tr><th><label for="ber-date">Date</label></th><td><input required type="date" id="ber-date" name="date" value="<?php echo esc_attr( $editing['date'] ); ?>"></td></tr>
 				</table>
@@ -91,13 +97,13 @@ class BER_Reminder_Admin {
 
 		$fields = array(
 			'name'  => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
-			'email' => isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '',
+			'email' => isset( $_POST['email'] ) ? sanitize_text_field( wp_unslash( $_POST['email'] ) ) : '',
 			'code'  => isset( $_POST['code'] ) ? sanitize_text_field( wp_unslash( $_POST['code'] ) ) : '',
 			'date'  => isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '',
 		);
 		$reminder_id = isset( $_POST['reminder_id'] ) ? absint( $_POST['reminder_id'] ) : 0;
 
-		if ( ! $fields['name'] || ! is_email( $fields['email'] ) || ! $fields['code'] || ! self::is_date( $fields['date'] ) ) {
+		if ( ! $fields['name'] || ! BER_Reminder_Post_Type::get_emails( $fields['email'] ) || ! $fields['code'] || ! self::is_date( $fields['date'] ) ) {
 			self::redirect( $reminder_id, 'error' );
 		}
 
@@ -127,6 +133,13 @@ class BER_Reminder_Admin {
 		self::redirect( 0, 'deleted' );
 	}
 
+	public static function run_cron() {
+		self::check_access();
+		check_admin_referer( 'ber_run_cron' );
+		BER_Reminder_Cron::process();
+		self::redirect( 0, 'cron-run' );
+	}
+
 	private static function check_access() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have permission to manage reminders.', 'bar-email-reminder' ) );
@@ -152,7 +165,7 @@ class BER_Reminder_Admin {
 		if ( empty( $_GET['message'] ) ) {
 			return;
 		}
-		$messages = array( 'saved' => 'Reminder saved.', 'deleted' => 'Reminder deleted.', 'error' => 'Please check the reminder fields.' );
+		$messages = array( 'saved' => 'Reminder saved.', 'deleted' => 'Reminder deleted.', 'error' => 'Please check the reminder fields.', 'cron-run' => 'Reminder check completed.' );
 		$key      = sanitize_key( wp_unslash( $_GET['message'] ) );
 		if ( isset( $messages[ $key ] ) ) {
 			echo '<div class="notice ' . ( 'error' === $key ? 'notice-error' : 'notice-success' ) . ' is-dismissible"><p>' . esc_html( $messages[ $key ] ) . '</p></div>';

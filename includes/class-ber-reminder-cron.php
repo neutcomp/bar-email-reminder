@@ -60,7 +60,7 @@ class BER_Reminder_Cron {
 			foreach ( $reminder_ids as $reminder_id ) {
 				$reminder = BER_Reminder_Post_Type::get( $reminder_id );
 
-				if ( 'not-sent' !== $reminder['status'] || ! self::is_valid_date( $reminder['date'] ) || ! is_email( $reminder['email'] ) ) {
+				if ( 'not-sent' !== $reminder['status'] || ! self::is_valid_date( $reminder['date'] ) || ! BER_Reminder_Post_Type::get_emails( $reminder['email'] ) ) {
 					continue;
 				}
 

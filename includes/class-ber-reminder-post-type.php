@@ -56,7 +56,7 @@ class BER_Reminder_Post_Type {
 
 	public static function save( $post_id, $fields ) {
 		update_post_meta( $post_id, self::NAME_META, sanitize_text_field( $fields['name'] ) );
-		update_post_meta( $post_id, self::EMAIL_META, sanitize_email( $fields['email'] ) );
+		update_post_meta( $post_id, self::EMAIL_META, implode( ';', self::get_emails( $fields['email'] ) ) );
 		update_post_meta( $post_id, self::CODE_META, sanitize_text_field( $fields['code'] ) );
 		update_post_meta( $post_id, self::DATE_META, sanitize_text_field( $fields['date'] ) );
 
@@ -65,5 +65,13 @@ class BER_Reminder_Post_Type {
 		} elseif ( ! get_post_meta( $post_id, self::STATUS_META, true ) ) {
 			update_post_meta( $post_id, self::STATUS_META, 'not-sent' );
 		}
+	}
+
+	public static function get_emails( $value ) {
+		$emails = array_map( 'trim', explode( ';', (string) $value ) );
+		$emails = array_filter( $emails );
+		$emails = array_map( 'sanitize_email', $emails );
+
+		return array_values( array_filter( $emails, 'is_email' ) );
 	}
 }
