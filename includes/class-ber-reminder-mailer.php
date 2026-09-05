@@ -8,12 +8,12 @@ class BER_Reminder_Mailer {
 	public static function send( $reminder ) {
 		$subject = sprintf(
 			/* translators: %s: recipient name */
-			__( 'Reminder for %s', 'bar-email-reminder' ),
+			__( 'Bardienst reminder voor %s', 'bar-email-reminder' ),
 			$reminder['name']
 		);
 
 		$message = sprintf(
-			__( "Hello %1$s,\n\nThis is your reminder.\n\nCode: %2$s\nDate: %3$s\n\nRegards,", 'bar-email-reminder' ),
+			__( "Hallo %1$s,\n\nDit is je herinnering voor de bardienst bij The Victory.\n\nSleutel code: %2$s\nDatum bardienst: %3$s\n\nMet vriendelijke groet,\nThe Victory", 'bar-email-reminder' ),
 			$reminder['name'],
 			$reminder['code'],
 			$reminder['date']
