@@ -13,7 +13,7 @@ class BER_Reminder_Mailer {
 		);
 
 		$message = sprintf(
-			__( "Hallo %1$s,\n\nDit is je herinnering voor de bardienst bij The Victory.\n\nSleutel code: %2$s\nDatum bardienst: %3$s\n\nMet vriendelijke groet,\nThe Victory", 'bar-email-reminder' ),
+			__( "Hallo %s,\n\nDit is je herinnering voor de bardienst bij The Victory.\n\nSleutel code: %s\nDatum bardienst: %s\n\nMet vriendelijke groet,\nThe Victory", 'bar-email-reminder' ),
 			$reminder['name'],
 			$reminder['code'],
 			$reminder['date']
