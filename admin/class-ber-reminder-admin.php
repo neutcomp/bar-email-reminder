@@ -68,7 +68,7 @@ class BER_Reminder_Admin {
 					<tr><th><label for="ber-name">Name</label></th><td><input required class="regular-text" id="ber-name" name="name" value="<?php echo esc_attr( $editing['name'] ); ?>"></td></tr>
 					<tr><th><label for="ber-email">Email</label></th><td><input required type="text" class="regular-text" id="ber-email" name="email" value="<?php echo esc_attr( $editing['email'] ); ?>"><p class="description"><?php esc_html_e( 'Separate multiple addresses with semicolons.', 'bar-email-reminder' ); ?></p></td></tr>
 					<tr><th><label for="ber-code">Code</label></th><td><input required class="regular-text" id="ber-code" name="code" value="<?php echo esc_attr( $editing['code'] ); ?>"></td></tr>
-					<tr><th><label for="ber-date">Date</label></th><td><input required type="date" id="ber-date" name="date" value="<?php echo esc_attr( $editing['date'] ); ?>"></td></tr>
+					<tr><th><label for="ber-date">Date</label></th><td><input required type="date" id="ber-date" name="date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( $editing['date'] ); ?>"></td></tr>
 				</table>
 				<?php submit_button( $editing['id'] ? __( 'Update reminder', 'bar-email-reminder' ) : __( 'Add reminder', 'bar-email-reminder' ) ); ?>
 			</form>
@@ -107,7 +107,7 @@ class BER_Reminder_Admin {
 		);
 		$reminder_id = isset( $_POST['reminder_id'] ) ? absint( $_POST['reminder_id'] ) : 0;
 
-		if ( ! $fields['name'] || ! BER_Reminder_Post_Type::get_emails( $fields['email'] ) || ! $fields['code'] || ! self::is_date( $fields['date'] ) ) {
+		if ( ! $fields['name'] || ! BER_Reminder_Post_Type::get_emails( $fields['email'] ) || ! $fields['code'] || ! self::is_date( $fields['date'] ) || self::is_past_date( $fields['date'] ) ) {
 			self::redirect( $reminder_id, 'error' );
 		}
 
@@ -163,6 +163,13 @@ class BER_Reminder_Admin {
 		$date_object = DateTimeImmutable::createFromFormat( '!Y-m-d', $date, wp_timezone() );
 
 		return $date_object && $date_object->format( 'Y-m-d' ) === $date;
+	}
+
+	private static function is_past_date( $date ) {
+		$date_object = DateTimeImmutable::createFromFormat( '!Y-m-d', $date, wp_timezone() );
+		$today       = new DateTimeImmutable( 'today', wp_timezone() );
+
+		return $date_object && $date_object < $today;
 	}
 
 	private static function notice() {
