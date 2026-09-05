@@ -74,6 +74,10 @@ class BER_Reminder_Admin {
 			</form>
 			<hr>
 			<h2><?php esc_html_e( 'Overview', 'bar-email-reminder' ); ?></h2>
+			<style>
+				.ber-status-not-sent { color: #b32d2e; font-weight: 600; }
+				.ber-status-sent { color: #008a20; font-weight: 600; }
+			</style>
 			<table class="widefat fixed striped">
 				<thead><tr><th>Name</th><th>Email</th><th>Code</th><th>Date</th><th>Status</th><th><?php esc_html_e( 'Actions', 'bar-email-reminder' ); ?></th></tr></thead>
 				<tbody>
@@ -81,7 +85,7 @@ class BER_Reminder_Admin {
 					<tr><td colspan="6"><?php esc_html_e( 'No reminders found.', 'bar-email-reminder' ); ?></td></tr>
 				<?php else : foreach ( $reminder_ids as $reminder_id ) : $reminder = BER_Reminder_Post_Type::get( $reminder_id ); ?>
 					<tr>
-						<td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( $reminder['email'] ); ?></td><td><?php echo esc_html( $reminder['code'] ); ?></td><td><?php echo esc_html( $reminder['date'] ); ?></td><td><?php echo esc_html( $reminder['status'] ); ?></td>
+						<td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( $reminder['email'] ); ?></td><td><?php echo esc_html( $reminder['code'] ); ?></td><td><?php echo esc_html( $reminder['date'] ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( $reminder['status'] ); ?></span></td>
 						<td><a href="<?php echo esc_url( admin_url( 'admin.php?page=' . self::PAGE . '&edit=' . $reminder_id ) ); ?>">Edit</a> | <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_delete_reminder&reminder_id=' . $reminder_id ), 'ber_delete_reminder_' . $reminder_id ) ); ?>" onclick="return confirm('Delete this reminder?');">Delete</a></td>
 					</tr>
 				<?php endforeach; endif; ?>
