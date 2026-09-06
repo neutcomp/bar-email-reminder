@@ -121,7 +121,9 @@ class BER_Reminder_Admin {
 			self::redirect( $reminder_id, 'error' );
 		}
 
-		if ( $reminder_id && BER_Reminder_Post_Type::POST_TYPE === get_post_type( $reminder_id ) ) {
+		$is_update = $reminder_id && BER_Reminder_Post_Type::POST_TYPE === get_post_type( $reminder_id );
+
+		if ( $is_update ) {
 			$post_id = $reminder_id;
 		} else {
 			$post_id = wp_insert_post( array( 'post_type' => BER_Reminder_Post_Type::POST_TYPE, 'post_status' => 'private', 'post_title' => $fields['name'] ), true );
@@ -132,7 +134,7 @@ class BER_Reminder_Admin {
 		}
 
 		BER_Reminder_Post_Type::save( $post_id, $fields );
-		self::redirect( $post_id, 'saved' );
+		self::redirect( $is_update ? $post_id : 0, 'saved' );
 	}
 
 	public static function delete() {
