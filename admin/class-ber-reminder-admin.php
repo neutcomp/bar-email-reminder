@@ -89,8 +89,9 @@ class BER_Reminder_Admin {
 				.ber-reminder-table .check-column { position: relative; vertical-align: middle !important; }
 				.ber-reminder-table .check-column input[type="checkbox"] { position: absolute; top: 50%; left: 50%; margin: 0; transform: translate(-50%, -50%); }
 				.ber-bulk-delete-submit { margin-top: 16px; }
-				.ber-reminder-form input[type="text"],
-				.ber-reminder-form input[type="date"] { box-sizing: border-box; height: 44px; }
+				.ber-reminder-form #ber-name,
+				.ber-reminder-form #ber-email,
+				.ber-reminder-form #ber-date { box-sizing: border-box; height: 44px !important; min-height: 44px !important; }
 			</style>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="ber_bulk_delete_reminders">
