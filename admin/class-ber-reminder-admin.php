@@ -86,8 +86,8 @@ class BER_Reminder_Admin {
 			<style>
 				.ber-status-not-sent { color: #b32d2e; font-weight: 600; }
 				.ber-status-sent { color: #008a20; font-weight: 600; }
-				.ber-reminder-table .check-column { vertical-align: middle !important; }
-				.ber-reminder-table .check-column input[type="checkbox"] { margin: 0; vertical-align: middle; }
+				.ber-reminder-table .check-column { position: relative; vertical-align: middle !important; }
+				.ber-reminder-table .check-column input[type="checkbox"] { position: absolute; top: 50%; left: 50%; margin: 0; transform: translate(-50%, -50%); }
 				.ber-bulk-delete-submit { margin-top: 16px; }
 			</style>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
