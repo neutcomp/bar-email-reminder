@@ -6,12 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class BER_Reminder_Admin {
 	const PAGE = 'ber-reminders';
+	const SETTINGS_PAGE = 'ber-reminder-settings';
 
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_post_ber_save_reminder', array( __CLASS__, 'save' ) );
 		add_action( 'admin_post_ber_delete_reminder', array( __CLASS__, 'delete' ) );
 		add_action( 'admin_post_ber_run_cron', array( __CLASS__, 'run_cron' ) );
+		add_action( 'admin_post_ber_save_settings', array( __CLASS__, 'save_settings' ) );
 	}
 
 	public static function menu() {
@@ -23,6 +25,14 @@ class BER_Reminder_Admin {
 			array( __CLASS__, 'render' ),
 			'dashicons-email-alt',
 			25
+		);
+		add_submenu_page(
+			self::PAGE,
+			__( 'Email Settings', 'bar-email-reminder' ),
+			__( 'Email Settings', 'bar-email-reminder' ),
+			'manage_options',
+			self::SETTINGS_PAGE,
+			array( __CLASS__, 'render_settings' )
 		);
 	}
 
@@ -144,6 +154,63 @@ class BER_Reminder_Admin {
 		self::redirect( 0, 'cron-run' );
 	}
 
+	public static function render_settings() {
+		self::check_access();
+		$settings = BER_Reminder_Mailer::get_settings();
+		?>
+		<div class="wrap">
+			<h1><?php esc_html_e( 'Email Settings', 'bar-email-reminder' ); ?></h1>
+			<?php self::notice(); ?>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="ber_save_settings">
+				<?php wp_nonce_field( 'ber_save_settings' ); ?>
+				<table class="form-table" role="presentation">
+					<tr>
+						<th><label for="ber-from-email">From email address</label></th>
+						<td><input required type="email" class="regular-text" id="ber-from-email" name="from_email" value="<?php echo esc_attr( $settings['from_email'] ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="ber-email-subject">Email subject</label></th>
+						<td><input required class="large-text" id="ber-email-subject" name="subject" value="<?php echo esc_attr( $settings['subject'] ); ?>"></td>
+					</tr>
+					<tr>
+						<th><label for="ber-email-message">Email message</label></th>
+						<td>
+							<textarea required class="large-text" rows="12" id="ber-email-message" name="message"><?php echo esc_textarea( $settings['message'] ); ?></textarea>
+							<p class="description"><?php esc_html_e( 'Available placeholders: {name}, {code}, and {date}.', 'bar-email-reminder' ); ?></p>
+						</td>
+					</tr>
+				</table>
+				<?php submit_button( __( 'Save email settings', 'bar-email-reminder' ) ); ?>
+			</form>
+		</div>
+		<?php
+	}
+
+	public static function save_settings() {
+		self::check_access();
+		check_admin_referer( 'ber_save_settings' );
+
+		$from_email = isset( $_POST['from_email'] ) ? sanitize_email( wp_unslash( $_POST['from_email'] ) ) : '';
+		$subject    = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
+		$message    = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
+
+		if ( ! is_email( $from_email ) || ! $subject || ! $message ) {
+			self::settings_redirect( 'error' );
+		}
+
+		update_option(
+			BER_Reminder_Mailer::SETTINGS_OPTION,
+			array(
+				'from_email' => $from_email,
+				'subject'    => $subject,
+				'message'    => $message,
+			)
+		);
+
+		self::settings_redirect( 'settings-saved' );
+	}
+
 	private static function check_access() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have permission to manage reminders.', 'bar-email-reminder' ) );
@@ -156,6 +223,11 @@ class BER_Reminder_Admin {
 			$url .= '&edit=' . absint( $reminder_id );
 		}
 		wp_safe_redirect( $url );
+		exit;
+	}
+
+	private static function settings_redirect( $message ) {
+		wp_safe_redirect( admin_url( 'admin.php?page=' . self::SETTINGS_PAGE . '&message=' . rawurlencode( $message ) ) );
 		exit;
 	}
 
