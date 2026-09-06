@@ -88,11 +88,12 @@ class BER_Reminder_Admin {
 			<style>
 				.ber-status-not-sent { color: #b32d2e; font-weight: 600; }
 				.ber-status-sent { color: #008a20; font-weight: 600; }
+				.ber-reminder-table .check-column { vertical-align: middle; }
 			</style>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="ber_bulk_delete_reminders">
 				<?php wp_nonce_field( 'ber_bulk_delete_reminders' ); ?>
-			<table class="widefat fixed striped">
+			<table class="widefat fixed striped ber-reminder-table">
 				<thead><tr><th class="check-column"><input type="checkbox" aria-label="Alles selecteren"></th><th>Naam</th><th>E-mailadres</th><th>Code</th><th>Datum</th><th>Status</th><th><?php esc_html_e( 'Acties', 'bar-email-reminder' ); ?></th></tr></thead>
 				<tbody>
 				<?php if ( ! $reminder_ids ) : ?>
