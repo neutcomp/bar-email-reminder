@@ -12,6 +12,7 @@ class BER_Reminder_Admin {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_post_ber_save_reminder', array( __CLASS__, 'save' ) );
 		add_action( 'admin_post_ber_delete_reminder', array( __CLASS__, 'delete' ) );
+		add_action( 'admin_post_ber_bulk_delete_reminders', array( __CLASS__, 'bulk_delete' ) );
 		add_action( 'admin_post_ber_run_cron', array( __CLASS__, 'run_cron' ) );
 		add_action( 'admin_post_ber_save_settings', array( __CLASS__, 'save_settings' ) );
 	}
@@ -88,19 +89,24 @@ class BER_Reminder_Admin {
 				.ber-status-not-sent { color: #b32d2e; font-weight: 600; }
 				.ber-status-sent { color: #008a20; font-weight: 600; }
 			</style>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="ber_bulk_delete_reminders">
+				<?php wp_nonce_field( 'ber_bulk_delete_reminders' ); ?>
 			<table class="widefat fixed striped">
-				<thead><tr><th>Naam</th><th>E-mailadres</th><th>Code</th><th>Datum</th><th>Status</th><th><?php esc_html_e( 'Acties', 'bar-email-reminder' ); ?></th></tr></thead>
+				<thead><tr><th class="check-column"><input type="checkbox" aria-label="Alles selecteren"></th><th>Naam</th><th>E-mailadres</th><th>Code</th><th>Datum</th><th>Status</th><th><?php esc_html_e( 'Acties', 'bar-email-reminder' ); ?></th></tr></thead>
 				<tbody>
 				<?php if ( ! $reminder_ids ) : ?>
-					<tr><td colspan="6"><?php esc_html_e( 'Geen herinneringen gevonden.', 'bar-email-reminder' ); ?></td></tr>
+					<tr><td colspan="7"><?php esc_html_e( 'Geen herinneringen gevonden.', 'bar-email-reminder' ); ?></td></tr>
 				<?php else : foreach ( $reminder_ids as $reminder_id ) : $reminder = BER_Reminder_Post_Type::get( $reminder_id ); ?>
 					<tr>
-						<td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( $reminder['email'] ); ?></td><td><?php echo esc_html( $reminder['code'] ); ?></td><td><?php echo esc_html( $reminder['date'] ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span></td>
+						<td class="check-column"><input type="checkbox" name="reminder_ids[]" value="<?php echo esc_attr( $reminder_id ); ?>" aria-label="Selecteer <?php echo esc_attr( $reminder['name'] ); ?>"></td><td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( $reminder['email'] ); ?></td><td><?php echo esc_html( $reminder['code'] ); ?></td><td><?php echo esc_html( $reminder['date'] ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span></td>
 						<td><a href="<?php echo esc_url( admin_url( 'admin.php?page=' . self::PAGE . '&edit=' . $reminder_id ) ); ?>">Bewerken</a> | <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_delete_reminder&reminder_id=' . $reminder_id ), 'ber_delete_reminder_' . $reminder_id ) ); ?>" onclick="return confirm('Deze herinnering verwijderen?');">Verwijderen</a></td>
 					</tr>
 				<?php endforeach; endif; ?>
 				</tbody>
 			</table>
+			<?php submit_button( __( 'Geselecteerde herinneringen verwijderen', 'bar-email-reminder' ), 'delete', 'submit', false, array( 'onclick' => "return confirm('De geselecteerde herinneringen verwijderen?');" ) ); ?>
+			</form>
 		</div>
 		<?php
 	}
@@ -147,6 +153,22 @@ class BER_Reminder_Admin {
 		}
 
 		self::redirect( 0, 'deleted' );
+	}
+
+	public static function bulk_delete() {
+		self::check_access();
+		check_admin_referer( 'ber_bulk_delete_reminders' );
+
+		$reminder_ids = isset( $_POST['reminder_ids'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['reminder_ids'] ) ) : array();
+		$deleted      = 0;
+
+		foreach ( $reminder_ids as $reminder_id ) {
+			if ( BER_Reminder_Post_Type::POST_TYPE === get_post_type( $reminder_id ) && wp_delete_post( $reminder_id, true ) ) {
+				$deleted++;
+			}
+		}
+
+		self::redirect( 0, $deleted ? 'bulk-deleted-' . $deleted : 'nothing-selected' );
 	}
 
 	public static function run_cron() {
@@ -262,6 +284,15 @@ class BER_Reminder_Admin {
 		}
 		$messages = array( 'saved' => 'Herinnering opgeslagen.', 'deleted' => 'Herinnering verwijderd.', 'error' => 'Controleer de velden van de herinnering.', 'cron-run' => 'Controle van herinneringen voltooid.', 'settings-saved' => 'E-mailinstellingen opgeslagen.' );
 		$key      = sanitize_key( wp_unslash( $_GET['message'] ) );
+		if ( 0 === strpos( $key, 'bulk-deleted-' ) ) {
+			$count = absint( substr( $key, strlen( 'bulk-deleted-' ) ) );
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( sprintf( _n( '%d herinnering verwijderd.', '%d herinneringen verwijderd.', $count, 'bar-email-reminder' ), $count ) ) . '</p></div>';
+			return;
+		}
+		if ( 'nothing-selected' === $key ) {
+			echo '<div class="notice notice-warning is-dismissible"><p>' . esc_html__( 'Selecteer eerst minstens één herinnering.', 'bar-email-reminder' ) . '</p></div>';
+			return;
+		}
 		if ( isset( $messages[ $key ] ) ) {
 			echo '<div class="notice ' . ( 'error' === $key ? 'notice-error' : 'notice-success' ) . ' is-dismissible"><p>' . esc_html( $messages[ $key ] ) . '</p></div>';
 		}
