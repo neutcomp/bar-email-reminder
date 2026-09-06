@@ -43,11 +43,16 @@ class BER_Reminder_Shortcode {
 
 		ob_start();
 		?>
+		<style>
+			.ber-bardienst-table { width: 100%; }
+			.ber-bardienst-table tbody tr { background-color: #fff; }
+			.ber-bardienst-table tbody tr:nth-child(even) { background-color: #f0f0f0; }
+		</style>
 		<table class="ber-bardienst-table">
 			<thead>
 				<tr>
 					<th><?php esc_html_e( 'Datum', 'bar-email-reminder' ); ?></th>
-					<th><?php esc_html_e( 'Naam', 'bar-email-reminder' ); ?></th>
+					<th><?php esc_html_e( 'Team', 'bar-email-reminder' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
