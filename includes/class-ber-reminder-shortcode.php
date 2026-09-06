@@ -45,6 +45,8 @@ class BER_Reminder_Shortcode {
 		?>
 		<style>
 			.ber-bardienst-table { width: 100%; }
+			.ber-bardienst-table th,
+			.ber-bardienst-table td { padding: 10px 12px; }
 			.ber-bardienst-table tbody tr { background-color: #fff; }
 			.ber-bardienst-table tbody tr:nth-child(even) { background-color: #f0f0f0; }
 		</style>

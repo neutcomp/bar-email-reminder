@@ -202,7 +202,18 @@ class BER_Reminder_Admin {
 					<tr>
 						<th><label for="ber-email-message">Bericht van e-mail</label></th>
 						<td>
-							<textarea required class="large-text" rows="12" id="ber-email-message" name="message"><?php echo esc_textarea( $settings['message'] ); ?></textarea>
+							<?php
+							wp_editor(
+								$settings['message'],
+								'ber-email-message',
+								array(
+									'textarea_name' => 'message',
+									'textarea_rows' => 12,
+									'media_buttons' => false,
+									'quicktags'     => true,
+								)
+							);
+							?>
 							<p class="description"><?php esc_html_e( 'Beschikbare invulvelden: {name} en {date}.', 'bar-email-reminder' ); ?></p>
 						</td>
 					</tr>
@@ -219,7 +230,7 @@ class BER_Reminder_Admin {
 
 		$from_email = isset( $_POST['from_email'] ) ? sanitize_email( wp_unslash( $_POST['from_email'] ) ) : '';
 		$subject    = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
-		$message    = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
+		$message    = isset( $_POST['message'] ) ? wp_kses_post( wp_unslash( $_POST['message'] ) ) : '';
 
 		if ( ! is_email( $from_email ) || ! $subject || ! $message ) {
 			self::settings_redirect( 'error' );
