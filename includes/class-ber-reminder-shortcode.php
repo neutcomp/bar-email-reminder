@@ -10,8 +10,9 @@ class BER_Reminder_Shortcode {
 	}
 
 	public static function render( $atts ) {
-		$atts  = shortcode_atts( array( 'split' => 'false' ), $atts, 'bardienst' );
-		$split = 'true' === strtolower( (string) $atts['split'] );
+		$atts        = shortcode_atts( array( 'split' => 'false', 'dateFormat' => 'long' ), $atts, 'bardienst' );
+		$split       = 'true' === strtolower( (string) $atts['split'] );
+		$date_format = 'short' === strtolower( (string) $atts['dateFormat'] ) ? 'short' : 'long';
 		$reminder_ids = get_posts(
 			array(
 				'post_type'      => BER_Reminder_Post_Type::POST_TYPE,
@@ -73,15 +74,15 @@ class BER_Reminder_Shortcode {
 				<?php foreach ( $columns[0] as $index => $reminder ) : ?>
 					<?php $second = isset( $columns[1][ $index ] ) ? $columns[1][ $index ] : null; ?>
 					<tr>
-						<td><?php echo esc_html( self::format_date( $reminder['date_object'] ) ); ?></td>
+						<td><?php echo esc_html( self::format_date( $reminder['date_object'], $date_format ) ); ?></td>
 						<td><?php echo esc_html( $reminder['name'] ); ?></td>
-						<td><?php echo $second ? esc_html( self::format_date( $second['date_object'] ) ) : ''; ?></td>
+						<td><?php echo $second ? esc_html( self::format_date( $second['date_object'], $date_format ) ) : ''; ?></td>
 						<td><?php echo $second ? esc_html( $second['name'] ) : ''; ?></td>
 					</tr>
 				<?php endforeach; ?>
 			<?php else : foreach ( $reminders as $reminder ) : ?>
 				<tr>
-					<td><?php echo esc_html( self::format_date( $reminder['date_object'] ) ); ?></td>
+					<td><?php echo esc_html( self::format_date( $reminder['date_object'], $date_format ) ); ?></td>
 					<td><?php echo esc_html( $reminder['name'] ); ?></td>
 				</tr>
 			<?php endforeach; endif; ?>
@@ -92,7 +93,11 @@ class BER_Reminder_Shortcode {
 		return ob_get_clean();
 	}
 
-	private static function format_date( $date ) {
+	private static function format_date( $date, $format ) {
+		if ( 'short' === $format ) {
+			return $date->format( 'd-m-Y' );
+		}
+
 		$weekdays = array( 'zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag' );
 		$months   = array( 1 => 'januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december' );
 		$weekday  = ucfirst( $weekdays[ (int) $date->format( 'w' ) ] );

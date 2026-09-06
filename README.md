@@ -28,6 +28,12 @@ Add `[bardienst]` to a post or page. It displays reminders sorted by date with a
 [bardienst split="true"]
 ```
 
+Use `dateFormat="short"` for numeric dates in `dd-mm-yyyy` format. Parameters can be combined:
+
+```text
+[bardienst split="true" dateFormat="short"]
+```
+
 ## Installation
 
 1. Copy this directory to `wp-content/plugins/bar-email-reminder`.
