@@ -11,7 +11,7 @@ class BER_Reminder_Mailer {
 		$defaults = array(
 			'from_email' => get_option( 'admin_email' ),
 			'subject'    => 'Bardienst reminder voor {name}',
-			'message'    => "Hallo {name},\n\nDit is je herinnering voor de bardienst bij The Victory.\n\nSleutel code: {code}\nDatum bardienst: {date}\n\nMet vriendelijke groet,\nThe Victory",
+			'message'    => "Hallo {name},\n\nDit is je herinnering voor de bardienst bij The Victory.\n\nDatum bardienst: {date}\n\nMet vriendelijke groet,\nThe Victory",
 		);
 
 		return wp_parse_args( get_option( self::SETTINGS_OPTION, array() ), $defaults );
@@ -23,7 +23,7 @@ class BER_Reminder_Mailer {
 		$settings = self::get_settings();
 		$replacements = array(
 			'{name}' => $reminder['name'],
-			'{code}' => $reminder['code'],
+			'{code}' => '',
 			'{date}' => $date,
 		);
 

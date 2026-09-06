@@ -47,7 +47,6 @@ class BER_Reminder_Admin {
 			'id'     => 0,
 			'name'   => '',
 			'email'  => '',
-			'code'   => '',
 			'date'   => '',
 			'status' => 'not-sent',
 		);
@@ -78,7 +77,6 @@ class BER_Reminder_Admin {
 				<table class="form-table" role="presentation">
 					<tr><th><label for="ber-name">Naam</label></th><td><input required class="regular-text" id="ber-name" name="name" value="<?php echo esc_attr( $editing['name'] ); ?>"></td></tr>
 					<tr><th><label for="ber-email">E-mailadres</label></th><td><input required type="text" class="regular-text" id="ber-email" name="email" value="<?php echo esc_attr( $editing['email'] ); ?>"><p class="description"><?php esc_html_e( 'Scheid meerdere e-mailadressen met puntkomma\'s.', 'bar-email-reminder' ); ?></p></td></tr>
-					<tr><th><label for="ber-code">Code</label></th><td><input required class="regular-text" id="ber-code" name="code" value="<?php echo esc_attr( $editing['code'] ); ?>"></td></tr>
 					<tr><th><label for="ber-date">Datum</label></th><td><input required type="date" id="ber-date" name="date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( $editing['date'] ); ?>"></td></tr>
 				</table>
 				<?php submit_button( $editing['id'] ? __( 'Herinnering bijwerken', 'bar-email-reminder' ) : __( 'Herinnering toevoegen', 'bar-email-reminder' ) ); ?>
@@ -95,13 +93,13 @@ class BER_Reminder_Admin {
 				<input type="hidden" name="action" value="ber_bulk_delete_reminders">
 				<?php wp_nonce_field( 'ber_bulk_delete_reminders' ); ?>
 			<table class="widefat fixed striped ber-reminder-table">
-				<thead><tr><th class="check-column"><input type="checkbox" aria-label="Alles selecteren"></th><th>Naam</th><th>E-mailadres</th><th>Code</th><th>Datum</th><th>Status</th><th><?php esc_html_e( 'Acties', 'bar-email-reminder' ); ?></th></tr></thead>
+				<thead><tr><th class="check-column"><input type="checkbox" aria-label="Alles selecteren"></th><th>Naam</th><th>E-mailadres</th><th>Datum</th><th>Status</th><th><?php esc_html_e( 'Acties', 'bar-email-reminder' ); ?></th></tr></thead>
 				<tbody>
 				<?php if ( ! $reminder_ids ) : ?>
-					<tr><td colspan="7"><?php esc_html_e( 'Geen herinneringen gevonden.', 'bar-email-reminder' ); ?></td></tr>
+					<tr><td colspan="6"><?php esc_html_e( 'Geen herinneringen gevonden.', 'bar-email-reminder' ); ?></td></tr>
 				<?php else : foreach ( $reminder_ids as $reminder_id ) : $reminder = BER_Reminder_Post_Type::get( $reminder_id ); ?>
 					<tr>
-						<td class="check-column"><input type="checkbox" name="reminder_ids[]" value="<?php echo esc_attr( $reminder_id ); ?>" aria-label="Selecteer <?php echo esc_attr( $reminder['name'] ); ?>"></td><td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( $reminder['email'] ); ?></td><td><?php echo esc_html( $reminder['code'] ); ?></td><td><?php echo esc_html( $reminder['date'] ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span></td>
+						<td class="check-column"><input type="checkbox" name="reminder_ids[]" value="<?php echo esc_attr( $reminder_id ); ?>" aria-label="Selecteer <?php echo esc_attr( $reminder['name'] ); ?>"></td><td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( $reminder['email'] ); ?></td><td><?php echo esc_html( $reminder['date'] ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span></td>
 						<td><a href="<?php echo esc_url( admin_url( 'admin.php?page=' . self::PAGE . '&edit=' . $reminder_id ) ); ?>">Bewerken</a> | <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_delete_reminder&reminder_id=' . $reminder_id ), 'ber_delete_reminder_' . $reminder_id ) ); ?>" onclick="return confirm('Deze herinnering verwijderen?');">Verwijderen</a></td>
 					</tr>
 				<?php endforeach; endif; ?>
@@ -122,12 +120,11 @@ class BER_Reminder_Admin {
 		$fields = array(
 			'name'  => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
 			'email' => isset( $_POST['email'] ) ? sanitize_text_field( wp_unslash( $_POST['email'] ) ) : '',
-			'code'  => isset( $_POST['code'] ) ? sanitize_text_field( wp_unslash( $_POST['code'] ) ) : '',
 			'date'  => isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '',
 		);
 		$reminder_id = isset( $_POST['reminder_id'] ) ? absint( $_POST['reminder_id'] ) : 0;
 
-		if ( ! $fields['name'] || ! BER_Reminder_Post_Type::get_emails( $fields['email'] ) || ! $fields['code'] || ! self::is_date( $fields['date'] ) || self::is_past_date( $fields['date'] ) ) {
+		if ( ! $fields['name'] || ! BER_Reminder_Post_Type::get_emails( $fields['email'] ) || ! self::is_date( $fields['date'] ) || self::is_past_date( $fields['date'] ) ) {
 			self::redirect( $reminder_id, 'error' );
 		}
 
@@ -205,7 +202,7 @@ class BER_Reminder_Admin {
 						<th><label for="ber-email-message">Bericht van e-mail</label></th>
 						<td>
 							<textarea required class="large-text" rows="12" id="ber-email-message" name="message"><?php echo esc_textarea( $settings['message'] ); ?></textarea>
-							<p class="description"><?php esc_html_e( 'Beschikbare invulvelden: {name}, {code} en {date}.', 'bar-email-reminder' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Beschikbare invulvelden: {name} en {date}.', 'bar-email-reminder' ); ?></p>
 						</td>
 					</tr>
 				</table>
