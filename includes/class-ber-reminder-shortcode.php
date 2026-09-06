@@ -10,9 +10,9 @@ class BER_Reminder_Shortcode {
 	}
 
 	public static function render( $atts ) {
-		$atts        = shortcode_atts( array( 'split' => 'false', 'dateFormat' => 'long' ), $atts, 'bardienst' );
+		$atts        = shortcode_atts( array( 'split' => 'false', 'dateformat' => 'long' ), $atts, 'bardienst' );
 		$split       = 'true' === strtolower( (string) $atts['split'] );
-		$date_format = 'short' === strtolower( (string) $atts['dateFormat'] ) ? 'short' : 'long';
+		$date_format = 'short' === strtolower( (string) $atts['dateformat'] ) ? 'short' : 'long';
 		$reminder_ids = get_posts(
 			array(
 				'post_type'      => BER_Reminder_Post_Type::POST_TYPE,
