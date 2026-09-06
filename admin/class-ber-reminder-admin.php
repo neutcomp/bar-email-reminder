@@ -89,6 +89,7 @@ class BER_Reminder_Admin {
 				.ber-status-not-sent { color: #b32d2e; font-weight: 600; }
 				.ber-status-sent { color: #008a20; font-weight: 600; }
 				.ber-reminder-table .check-column { vertical-align: middle; }
+				.ber-bulk-delete-submit { margin-top: 16px; }
 			</style>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="ber_bulk_delete_reminders">
@@ -106,7 +107,9 @@ class BER_Reminder_Admin {
 				<?php endforeach; endif; ?>
 				</tbody>
 			</table>
-			<?php submit_button( __( 'Geselecteerde herinneringen verwijderen', 'bar-email-reminder' ), 'delete', 'submit', false, array( 'onclick' => "return confirm('De geselecteerde herinneringen verwijderen?');" ) ); ?>
+			<div class="ber-bulk-delete-submit">
+				<?php submit_button( __( 'Geselecteerde herinneringen verwijderen', 'bar-email-reminder' ), 'delete', 'submit', false, array( 'onclick' => "return confirm('De geselecteerde herinneringen verwijderen?');" ) ); ?>
+			</div>
 			</form>
 		</div>
 		<?php
