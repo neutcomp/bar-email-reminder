@@ -100,7 +100,7 @@ class BER_Reminder_Admin {
 					<tr><td colspan="6"><?php esc_html_e( 'Geen herinneringen gevonden.', 'bar-email-reminder' ); ?></td></tr>
 				<?php else : foreach ( $reminder_ids as $reminder_id ) : $reminder = BER_Reminder_Post_Type::get( $reminder_id ); ?>
 					<tr>
-						<td class="check-column"><input type="checkbox" name="reminder_ids[]" value="<?php echo esc_attr( $reminder_id ); ?>" aria-label="Selecteer <?php echo esc_attr( $reminder['name'] ); ?>"></td><td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( $reminder['email'] ); ?></td><td><?php echo esc_html( $reminder['date'] ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span></td>
+						<td class="check-column"><input type="checkbox" name="reminder_ids[]" value="<?php echo esc_attr( $reminder_id ); ?>" aria-label="Selecteer <?php echo esc_attr( $reminder['name'] ); ?>"></td><td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( $reminder['email'] ); ?></td><td><?php echo esc_html( self::format_date( $reminder['date'] ) ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span></td>
 						<td><a href="<?php echo esc_url( admin_url( 'admin.php?page=' . self::PAGE . '&edit=' . $reminder_id ) ); ?>">Bewerken</a> | <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_delete_reminder&reminder_id=' . $reminder_id ), 'ber_delete_reminder_' . $reminder_id ) ); ?>" onclick="return confirm('Deze herinnering verwijderen?');">Verwijderen</a></td>
 					</tr>
 				<?php endforeach; endif; ?>
@@ -268,6 +268,12 @@ class BER_Reminder_Admin {
 		$today       = new DateTimeImmutable( 'today', wp_timezone() );
 
 		return $date_object && $date_object < $today;
+	}
+
+	private static function format_date( $date ) {
+		$date_object = DateTimeImmutable::createFromFormat( '!Y-m-d', $date, wp_timezone() );
+
+		return $date_object ? $date_object->format( 'd-m-Y' ) : $date;
 	}
 
 	private static function get_status_label( $status ) {
