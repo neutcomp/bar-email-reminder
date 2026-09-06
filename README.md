@@ -22,7 +22,11 @@ The email template supports `{name}` and `{date}` placeholders. The date placeho
 
 ## Shortcode
 
-Add `[bardienst]` to a post or page. It displays reminders sorted by date with a Dutch date format such as `Donderdag 10 augustus`.
+Add `[bardienst]` to a post or page. It displays reminders sorted by date with a Dutch date format such as `Donderdag 10 augustus`. Add `split="true"` to display two date/team pairs next to each other:
+
+```text
+[bardienst split="true"]
+```
 
 ## Installation
 
