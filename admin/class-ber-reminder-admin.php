@@ -67,8 +67,9 @@ class BER_Reminder_Admin {
 				'post_type'      => BER_Reminder_Post_Type::POST_TYPE,
 				'post_status'    => 'any',
 				'posts_per_page' => -1,
-				'orderby'        => 'date',
-				'order'          => 'DESC',
+				'orderby'        => 'meta_value',
+				'order'          => 'ASC',
+				'meta_key'       => BER_Reminder_Post_Type::DATE_META,
 				'fields'         => 'ids',
 			)
 		);
