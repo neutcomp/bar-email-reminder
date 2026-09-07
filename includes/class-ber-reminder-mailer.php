@@ -28,7 +28,7 @@ class BER_Reminder_Mailer {
 		);
 
 		$subject = strtr( $settings['subject'], $replacements );
-		$message = strtr( $settings['message'], $replacements );
+		$message = wpautop( strtr( $settings['message'], $replacements ) );
 		$headers = array(
 			'From: ' . $settings['from_email'],
 			'Content-Type: text/html; charset=UTF-8',
