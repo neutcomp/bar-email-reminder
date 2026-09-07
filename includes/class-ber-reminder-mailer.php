@@ -34,6 +34,14 @@ class BER_Reminder_Mailer {
 			'Content-Type: text/html; charset=UTF-8',
 		);
 
-		return wp_mail( BER_Reminder_Post_Type::get_emails( $reminder['email'] ), $subject, $message, $headers );
+		return wp_mail( self::get_recipients( $reminder ), $subject, $message, $headers );
+	}
+
+	public static function get_recipients( $reminder ) {
+		if ( ! empty( $reminder['team_id'] ) && BER_Team_Post_Type::POST_TYPE === get_post_type( $reminder['team_id'] ) ) {
+			return BER_Team_Post_Type::get_emails( $reminder['team_id'] );
+		}
+
+		return BER_Reminder_Post_Type::get_emails( $reminder['email'] );
 	}
 }

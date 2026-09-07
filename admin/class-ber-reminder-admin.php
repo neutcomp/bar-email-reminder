@@ -6,12 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class BER_Reminder_Admin {
 	const PAGE = 'ber-reminders';
+	const TEAMS_PAGE = 'ber-reminder-teams';
 	const SETTINGS_PAGE = 'ber-reminder-settings';
 
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_post_ber_save_reminder', array( __CLASS__, 'save' ) );
+		add_action( 'admin_post_ber_save_team', array( __CLASS__, 'save_team' ) );
 		add_action( 'admin_post_ber_delete_reminder', array( __CLASS__, 'delete' ) );
+		add_action( 'admin_post_ber_delete_team', array( __CLASS__, 'delete_team' ) );
 		add_action( 'admin_post_ber_bulk_delete_reminders', array( __CLASS__, 'bulk_delete' ) );
 		add_action( 'admin_post_ber_run_cron', array( __CLASS__, 'run_cron' ) );
 		add_action( 'admin_post_ber_save_settings', array( __CLASS__, 'save_settings' ) );
@@ -26,6 +29,14 @@ class BER_Reminder_Admin {
 			array( __CLASS__, 'render' ),
 			'dashicons-email-alt',
 			25
+		);
+		add_submenu_page(
+			self::PAGE,
+			__( 'Teams', 'bar-email-reminder' ),
+			__( 'Teams', 'bar-email-reminder' ),
+			'manage_options',
+			self::TEAMS_PAGE,
+			array( __CLASS__, 'render_teams' )
 		);
 		add_submenu_page(
 			self::PAGE,
@@ -46,10 +57,11 @@ class BER_Reminder_Admin {
 		$editing  = $edit_id ? BER_Reminder_Post_Type::get( $edit_id ) : array(
 			'id'     => 0,
 			'name'   => '',
-			'email'  => '',
+			'team_id' => 0,
 			'date'   => '',
 			'status' => 'not-sent',
 		);
+		$teams = BER_Team_Post_Type::get_all();
 		$reminder_ids = get_posts(
 			array(
 				'post_type'      => BER_Reminder_Post_Type::POST_TYPE,
@@ -76,7 +88,7 @@ class BER_Reminder_Admin {
 				<?php wp_nonce_field( 'ber_save_reminder' ); ?>
 				<table class="form-table" role="presentation">
 					<tr><th><label for="ber-name">Naam</label></th><td><input required class="regular-text" id="ber-name" name="name" value="<?php echo esc_attr( $editing['name'] ); ?>"></td></tr>
-					<tr><th><label for="ber-email">E-mailadres</label></th><td><input required type="text" class="regular-text" id="ber-email" name="email" value="<?php echo esc_attr( $editing['email'] ); ?>"><p class="description"><?php esc_html_e( 'Scheid meerdere e-mailadressen met puntkomma\'s.', 'bar-email-reminder' ); ?></p></td></tr>
+					<tr><th><label for="ber-team">Team</label></th><td><select required class="regular-text" id="ber-team" name="team_id"><option value=""><?php esc_html_e( 'Selecteer een team', 'bar-email-reminder' ); ?></option><?php foreach ( $teams as $team ) : ?><option value="<?php echo esc_attr( $team['id'] ); ?>" <?php selected( $editing['team_id'], $team['id'] ); ?>><?php echo esc_html( $team['name'] ); ?></option><?php endforeach; ?></select><?php if ( ! $teams ) : ?><p class="description"><?php esc_html_e( 'Maak eerst een team aan.', 'bar-email-reminder' ); ?></p><?php endif; ?></td></tr>
 					<tr><th><label for="ber-date">Datum</label></th><td><input required type="date" id="ber-date" name="date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( $editing['date'] ); ?>"></td></tr>
 				</table>
 				<?php submit_button( $editing['id'] ? __( 'Herinnering bijwerken', 'bar-email-reminder' ) : __( 'Herinnering toevoegen', 'bar-email-reminder' ) ); ?>
@@ -97,13 +109,13 @@ class BER_Reminder_Admin {
 				<input type="hidden" name="action" value="ber_bulk_delete_reminders">
 				<?php wp_nonce_field( 'ber_bulk_delete_reminders' ); ?>
 			<table class="widefat fixed striped ber-reminder-table">
-				<thead><tr><th class="check-column"><input type="checkbox" aria-label="Alles selecteren"></th><th>Naam</th><th>E-mailadres</th><th>Datum</th><th>Status</th><th><?php esc_html_e( 'Acties', 'bar-email-reminder' ); ?></th></tr></thead>
+				<thead><tr><th class="check-column"><input type="checkbox" aria-label="Alles selecteren"></th><th>Naam</th><th>Team</th><th>Datum</th><th>Status</th><th><?php esc_html_e( 'Acties', 'bar-email-reminder' ); ?></th></tr></thead>
 				<tbody>
 				<?php if ( ! $reminder_ids ) : ?>
 					<tr><td colspan="6"><?php esc_html_e( 'Geen herinneringen gevonden.', 'bar-email-reminder' ); ?></td></tr>
 				<?php else : foreach ( $reminder_ids as $reminder_id ) : $reminder = BER_Reminder_Post_Type::get( $reminder_id ); ?>
 					<tr>
-						<td class="check-column"><input type="checkbox" name="reminder_ids[]" value="<?php echo esc_attr( $reminder_id ); ?>" aria-label="Selecteer <?php echo esc_attr( $reminder['name'] ); ?>"></td><td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( $reminder['email'] ); ?></td><td><?php echo esc_html( self::format_date( $reminder['date'] ) ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span></td>
+						<td class="check-column"><input type="checkbox" name="reminder_ids[]" value="<?php echo esc_attr( $reminder_id ); ?>" aria-label="Selecteer <?php echo esc_attr( $reminder['name'] ); ?>"></td><td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( self::get_team_name( $reminder['team_id'] ) ); ?></td><td><?php echo esc_html( self::format_date( $reminder['date'] ) ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span></td>
 						<td><a href="<?php echo esc_url( admin_url( 'admin.php?page=' . self::PAGE . '&edit=' . $reminder_id ) ); ?>">Bewerken</a> | <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_delete_reminder&reminder_id=' . $reminder_id ), 'ber_delete_reminder_' . $reminder_id ) ); ?>" onclick="return confirm('Deze herinnering verwijderen?');">Verwijderen</a></td>
 					</tr>
 				<?php endforeach; endif; ?>
@@ -122,14 +134,14 @@ class BER_Reminder_Admin {
 		check_admin_referer( 'ber_save_reminder' );
 
 		$fields = array(
-			'name'  => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
-			'email' => isset( $_POST['email'] ) ? sanitize_text_field( wp_unslash( $_POST['email'] ) ) : '',
-			'date'  => isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '',
+			'name'    => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
+			'team_id' => isset( $_POST['team_id'] ) ? absint( $_POST['team_id'] ) : 0,
+			'date'    => isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '',
 			'status' => 'not-sent',
 		);
 		$reminder_id = isset( $_POST['reminder_id'] ) ? absint( $_POST['reminder_id'] ) : 0;
 
-		if ( ! $fields['name'] || ! BER_Reminder_Post_Type::get_emails( $fields['email'] ) || ! self::is_date( $fields['date'] ) || self::is_past_date( $fields['date'] ) ) {
+		if ( ! $fields['name'] || ! self::is_valid_team( $fields['team_id'] ) || ! self::is_date( $fields['date'] ) || self::is_past_date( $fields['date'] ) ) {
 			self::redirect( $reminder_id, 'error' );
 		}
 
@@ -147,6 +159,98 @@ class BER_Reminder_Admin {
 
 		BER_Reminder_Post_Type::save( $post_id, $fields );
 		self::redirect( $is_update ? $post_id : 0, 'saved' );
+	}
+
+	public static function render_teams() {
+		self::check_access();
+		$edit_id = isset( $_GET['edit'] ) ? absint( $_GET['edit'] ) : 0;
+		$editing = $edit_id ? BER_Team_Post_Type::get( $edit_id ) : array( 'id' => 0, 'name' => '', 'email' => '' );
+		$teams   = BER_Team_Post_Type::get_all();
+		?>
+		<div class="wrap">
+			<h1><?php esc_html_e( 'Teams', 'bar-email-reminder' ); ?></h1>
+			<?php self::notice(); ?>
+			<h2><?php echo $editing['id'] ? esc_html__( 'Team bewerken', 'bar-email-reminder' ) : esc_html__( 'Team toevoegen', 'bar-email-reminder' ); ?></h2>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="ber_save_team">
+				<input type="hidden" name="team_id" value="<?php echo esc_attr( $editing['id'] ); ?>">
+				<?php wp_nonce_field( 'ber_save_team' ); ?>
+				<table class="form-table" role="presentation">
+					<tr><th><label for="ber-team-name">Naam</label></th><td><input required class="regular-text" id="ber-team-name" name="name" value="<?php echo esc_attr( $editing['name'] ); ?>"></td></tr>
+					<tr><th><label for="ber-team-email">E-mailadres</label></th><td><input required type="text" class="regular-text" id="ber-team-email" name="email" value="<?php echo esc_attr( $editing['email'] ); ?>"><p class="description"><?php esc_html_e( 'Scheid meerdere e-mailadressen met puntkomma\'s.', 'bar-email-reminder' ); ?></p></td></tr>
+				</table>
+				<?php submit_button( $editing['id'] ? __( 'Team bijwerken', 'bar-email-reminder' ) : __( 'Team toevoegen', 'bar-email-reminder' ) ); ?>
+			</form>
+			<hr>
+			<h2><?php esc_html_e( 'Overzicht', 'bar-email-reminder' ); ?></h2>
+			<table class="widefat fixed striped">
+				<thead><tr><th>Naam</th><th>E-mailadres</th><th><?php esc_html_e( 'Acties', 'bar-email-reminder' ); ?></th></tr></thead>
+				<tbody>
+				<?php if ( ! $teams ) : ?>
+					<tr><td colspan="3"><?php esc_html_e( 'Geen teams gevonden.', 'bar-email-reminder' ); ?></td></tr>
+				<?php else : foreach ( $teams as $team ) : ?>
+					<tr><td><?php echo esc_html( $team['name'] ); ?></td><td><?php echo esc_html( $team['email'] ); ?></td><td><a href="<?php echo esc_url( admin_url( 'admin.php?page=' . self::TEAMS_PAGE . '&edit=' . $team['id'] ) ); ?>">Bewerken</a> | <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_delete_team&team_id=' . $team['id'] ), 'ber_delete_team_' . $team['id'] ) ); ?>" onclick="return confirm('Dit team verwijderen?');">Verwijderen</a></td></tr>
+				<?php endforeach; endif; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php
+	}
+
+	public static function save_team() {
+		self::check_access();
+		check_admin_referer( 'ber_save_team' );
+
+		$fields  = array(
+			'name'  => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
+			'email' => isset( $_POST['email'] ) ? sanitize_text_field( wp_unslash( $_POST['email'] ) ) : '',
+		);
+		$team_id = isset( $_POST['team_id'] ) ? absint( $_POST['team_id'] ) : 0;
+
+		if ( ! $fields['name'] || ! BER_Reminder_Post_Type::get_emails( $fields['email'] ) ) {
+			self::team_redirect( $team_id, 'error' );
+		}
+
+		$is_update = $team_id && BER_Team_Post_Type::POST_TYPE === get_post_type( $team_id );
+		$post_id   = $is_update ? $team_id : wp_insert_post( array( 'post_type' => BER_Team_Post_Type::POST_TYPE, 'post_status' => 'private', 'post_title' => $fields['name'] ), true );
+
+		if ( is_wp_error( $post_id ) ) {
+			self::team_redirect( 0, 'error' );
+		}
+
+		BER_Team_Post_Type::save( $post_id, $fields );
+		self::team_redirect( $is_update ? $post_id : 0, 'team-saved' );
+	}
+
+	public static function delete_team() {
+		self::check_access();
+		$team_id = isset( $_GET['team_id'] ) ? absint( $_GET['team_id'] ) : 0;
+		check_admin_referer( 'ber_delete_team_' . $team_id );
+
+		$linked_reminders = get_posts(
+			array(
+				'post_type'      => BER_Reminder_Post_Type::POST_TYPE,
+				'post_status'    => 'any',
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+				'meta_query'     => array(
+					array(
+						'key'   => BER_Reminder_Post_Type::TEAM_META,
+						'value' => $team_id,
+					),
+				),
+			)
+		);
+
+		if ( $linked_reminders ) {
+			self::team_redirect( 0, 'team-in-use' );
+		}
+
+		if ( BER_Team_Post_Type::POST_TYPE === get_post_type( $team_id ) ) {
+			wp_delete_post( $team_id, true );
+		}
+
+		self::team_redirect( 0, 'team-deleted' );
 	}
 
 	public static function delete() {
@@ -272,6 +376,27 @@ class BER_Reminder_Admin {
 		exit;
 	}
 
+	private static function team_redirect( $team_id, $message ) {
+		$url = admin_url( 'admin.php?page=' . self::TEAMS_PAGE . '&message=' . rawurlencode( $message ) );
+		if ( $team_id ) {
+			$url .= '&edit=' . absint( $team_id );
+		}
+		wp_safe_redirect( $url );
+		exit;
+	}
+
+	private static function is_valid_team( $team_id ) {
+		return $team_id && BER_Team_Post_Type::POST_TYPE === get_post_type( $team_id ) && BER_Team_Post_Type::get_emails( $team_id );
+	}
+
+	private static function get_team_name( $team_id ) {
+		if ( ! $team_id || BER_Team_Post_Type::POST_TYPE !== get_post_type( $team_id ) ) {
+			return __( 'Onbekend team', 'bar-email-reminder' );
+		}
+
+		return BER_Team_Post_Type::get( $team_id )['name'];
+	}
+
 	private static function is_date( $date ) {
 		$date_object = DateTimeImmutable::createFromFormat( '!Y-m-d', $date, wp_timezone() );
 
@@ -305,7 +430,7 @@ class BER_Reminder_Admin {
 		if ( empty( $_GET['message'] ) ) {
 			return;
 		}
-		$messages = array( 'saved' => 'Herinnering opgeslagen.', 'deleted' => 'Herinnering verwijderd.', 'error' => 'Controleer de velden van de herinnering.', 'cron-run' => 'Controle van herinneringen voltooid.', 'settings-saved' => 'E-mailinstellingen opgeslagen.' );
+		$messages = array( 'saved' => 'Herinnering opgeslagen.', 'deleted' => 'Herinnering verwijderd.', 'error' => 'Controleer de velden.', 'cron-run' => 'Controle van herinneringen voltooid.', 'settings-saved' => 'E-mailinstellingen opgeslagen.', 'team-saved' => 'Team opgeslagen.', 'team-deleted' => 'Team verwijderd.', 'team-in-use' => 'Dit team kan niet worden verwijderd omdat het nog aan een herinnering is gekoppeld.' );
 		$key      = sanitize_key( wp_unslash( $_GET['message'] ) );
 		if ( 0 === strpos( $key, 'bulk-deleted-' ) ) {
 			$count = absint( substr( $key, strlen( 'bulk-deleted-' ) ) );

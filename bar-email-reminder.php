@@ -18,12 +18,14 @@ define( 'BER_FILE', __FILE__ );
 define( 'BER_PATH', plugin_dir_path( __FILE__ ) );
 
 require_once BER_PATH . 'includes/class-ber-reminder-post-type.php';
+require_once BER_PATH . 'includes/class-ber-team-post-type.php';
 require_once BER_PATH . 'includes/class-ber-reminder-mailer.php';
 require_once BER_PATH . 'includes/class-ber-reminder-cron.php';
 require_once BER_PATH . 'includes/class-ber-reminder-shortcode.php';
 require_once BER_PATH . 'admin/class-ber-reminder-admin.php';
 
 BER_Reminder_Post_Type::init();
+BER_Team_Post_Type::init();
 BER_Reminder_Cron::init();
 BER_Reminder_Shortcode::init();
 BER_Reminder_Admin::init();

@@ -9,6 +9,7 @@ class BER_Reminder_Post_Type {
 
 	const NAME_META   = '_ber_name';
 	const EMAIL_META  = '_ber_email';
+	const TEAM_META   = '_ber_team_id';
 	const DATE_META   = '_ber_date';
 	const STATUS_META = '_ber_status';
 
@@ -40,6 +41,7 @@ class BER_Reminder_Post_Type {
 		return array(
 			'id'     => absint( $post_id ),
 			'name'   => (string) get_post_meta( $post_id, self::NAME_META, true ),
+			'team_id' => absint( get_post_meta( $post_id, self::TEAM_META, true ) ),
 			'email'  => (string) get_post_meta( $post_id, self::EMAIL_META, true ),
 			'date'   => (string) get_post_meta( $post_id, self::DATE_META, true ),
 			'status' => self::get_status( $post_id ),
@@ -54,7 +56,7 @@ class BER_Reminder_Post_Type {
 
 	public static function save( $post_id, $fields ) {
 		update_post_meta( $post_id, self::NAME_META, sanitize_text_field( $fields['name'] ) );
-		update_post_meta( $post_id, self::EMAIL_META, implode( ';', self::get_emails( $fields['email'] ) ) );
+		update_post_meta( $post_id, self::TEAM_META, absint( $fields['team_id'] ) );
 		update_post_meta( $post_id, self::DATE_META, sanitize_text_field( $fields['date'] ) );
 
 		if ( isset( $fields['status'] ) ) {
