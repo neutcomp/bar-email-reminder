@@ -8,6 +8,7 @@ class BER_Reminder_Admin {
 	const PAGE = 'ber-reminders';
 	const TEAMS_PAGE = 'ber-reminder-teams';
 	const SETTINGS_PAGE = 'ber-reminder-settings';
+	const CAPABILITY = 'edit_others_posts';
 
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
@@ -24,7 +25,7 @@ class BER_Reminder_Admin {
 		add_menu_page(
 			__( 'Bar e-mailherinneringen', 'bar-email-reminder' ),
 			__( 'Herinneringen', 'bar-email-reminder' ),
-			'manage_options',
+			self::CAPABILITY,
 			self::PAGE,
 			array( __CLASS__, 'render' ),
 			'dashicons-email-alt',
@@ -34,7 +35,7 @@ class BER_Reminder_Admin {
 			self::PAGE,
 			__( 'Teams', 'bar-email-reminder' ),
 			__( 'Teams', 'bar-email-reminder' ),
-			'manage_options',
+			self::CAPABILITY,
 			self::TEAMS_PAGE,
 			array( __CLASS__, 'render_teams' )
 		);
@@ -42,14 +43,14 @@ class BER_Reminder_Admin {
 			self::PAGE,
 			__( 'E-mailinstellingen', 'bar-email-reminder' ),
 			__( 'E-mailinstellingen', 'bar-email-reminder' ),
-			'manage_options',
+			self::CAPABILITY,
 			self::SETTINGS_PAGE,
 			array( __CLASS__, 'render_settings' )
 		);
 	}
 
 	public static function render() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
 			wp_die( esc_html__( 'Je hebt geen toestemming om herinneringen te beheren.', 'bar-email-reminder' ) );
 		}
 
@@ -358,7 +359,7 @@ class BER_Reminder_Admin {
 	}
 
 	private static function check_access() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
 			wp_die( esc_html__( 'Je hebt geen toestemming om herinneringen te beheren.', 'bar-email-reminder' ) );
 		}
 	}
