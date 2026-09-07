@@ -322,7 +322,7 @@ class BER_Reminder_Admin {
 								)
 							);
 							?>
-							<p class="description"><?php esc_html_e( 'Beschikbare invulvelden: {name} en {date}.', 'bar-email-reminder' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Beschikbare invulvelden: {name}, {team} en {date}.', 'bar-email-reminder' ); ?></p>
 						</td>
 					</tr>
 				</table>

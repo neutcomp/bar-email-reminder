@@ -19,7 +19,7 @@ Bar Email Reminder is a small WordPress plugin for managing dated email reminder
 - The email message uses the WordPress HTML editor and supports safe formatting such as bold text.
 - Provides a `[bardienst]` shortcode for displaying a public table with the date and name of each reminder.
 
-The email template supports `{name}` and `{date}` placeholders. The date placeholder is formatted as `dd-mm-yyyy`.
+The email template supports `{name}`, `{team}`, and `{date}` placeholders. The date placeholder is formatted as `dd-mm-yyyy`.
 
 ## Shortcode
 

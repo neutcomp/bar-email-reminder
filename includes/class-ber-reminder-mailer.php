@@ -11,7 +11,7 @@ class BER_Reminder_Mailer {
 		$defaults = array(
 			'from_email' => get_option( 'admin_email' ),
 			'subject'    => 'Bardienst reminder voor {name}',
-			'message'    => "Hallo {name},\n\nDit is je herinnering voor de bardienst bij The Victory.\n\nDatum bardienst: {date}\n\nMet vriendelijke groet,\nThe Victory",
+			'message'    => "Hallo {name},\n\nDit is je herinnering voor de bardienst bij The Victory.\n\nTeam: {team}\nDatum bardienst: {date}\n\nMet vriendelijke groet,\nThe Victory",
 		);
 
 		return wp_parse_args( get_option( self::SETTINGS_OPTION, array() ), $defaults );
@@ -20,9 +20,11 @@ class BER_Reminder_Mailer {
 	public static function send( $reminder ) {
 		$date = DateTimeImmutable::createFromFormat( '!Y-m-d', $reminder['date'], wp_timezone() );
 		$date = $date ? $date->format( 'd-m-Y' ) : $reminder['date'];
+		$team = ! empty( $reminder['team_id'] ) && BER_Team_Post_Type::POST_TYPE === get_post_type( $reminder['team_id'] ) ? BER_Team_Post_Type::get( $reminder['team_id'] )['name'] : '';
 		$settings = self::get_settings();
 		$replacements = array(
 			'{name}' => $reminder['name'],
+			'{team}' => $team,
 			'{code}' => '',
 			'{date}' => $date,
 		);
