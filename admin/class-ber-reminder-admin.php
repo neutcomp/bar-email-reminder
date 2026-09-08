@@ -121,7 +121,13 @@ class BER_Reminder_Admin {
 					<tr><td colspan="6"><?php esc_html_e( 'No reminders found.', 'bar-email-reminder' ); ?></td></tr>
 				<?php else : foreach ( $reminder_ids as $reminder_id ) : $reminder = BER_Reminder_Post_Type::get( $reminder_id ); ?>
 					<tr>
-						<td class="check-column"><input type="checkbox" name="reminder_ids[]" value="<?php echo esc_attr( $reminder_id ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Select %s', 'bar-email-reminder' ), $reminder['name'] ) ); ?>"></td><td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( self::get_team_name( $reminder['team_id'] ) ); ?></td><td><?php echo esc_html( self::format_date( $reminder['date'] ) ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span></td>
+						<td class="check-column">
+							<?php
+							/* translators: %s: reminder name. */
+							$select_label = sprintf( __( 'Select %s', 'bar-email-reminder' ), $reminder['name'] );
+							?>
+							<input type="checkbox" name="reminder_ids[]" value="<?php echo esc_attr( $reminder_id ); ?>" aria-label="<?php echo esc_attr( $select_label ); ?>">
+						</td><td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( self::get_team_name( $reminder['team_id'] ) ); ?></td><td><?php echo esc_html( self::format_date( $reminder['date'] ) ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span></td>
 						<td><a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=' . self::PAGE . '&edit=' . $reminder_id ), 'ber_edit_reminder' ) ); ?>"><?php esc_html_e( 'Edit', 'bar-email-reminder' ); ?></a> | <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_delete_reminder&reminder_id=' . $reminder_id ), 'ber_delete_reminder_' . $reminder_id ) ); ?>" onclick="return confirm('<?php echo esc_js( __( 'Delete this reminder?', 'bar-email-reminder' ) ); ?>');"><?php esc_html_e( 'Delete', 'bar-email-reminder' ); ?></a></td>
 					</tr>
 				<?php endforeach; endif; ?>
@@ -445,7 +451,9 @@ class BER_Reminder_Admin {
 		$key      = sanitize_key( $message );
 		if ( 0 === strpos( $key, 'bulk-deleted-' ) ) {
 			$count = absint( substr( $key, strlen( 'bulk-deleted-' ) ) );
-			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( sprintf( _n( '%d reminder deleted.', '%d reminders deleted.', $count, 'bar-email-reminder' ), $count ) ) . '</p></div>';
+			/* translators: %d: number of reminders deleted. */
+			$deleted_message = sprintf( _n( '%d reminder deleted.', '%d reminders deleted.', $count, 'bar-email-reminder' ), $count );
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( $deleted_message ) . '</p></div>';
 			return;
 		}
 		if ( 'nothing-selected' === $key ) {
