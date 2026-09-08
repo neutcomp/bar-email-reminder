@@ -7,6 +7,7 @@
  * Requires PHP: 7.4
  * Author: Bjorn van der Neut
  * Text Domain: bar-email-reminder
+ * Domain Path: /languages
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -16,6 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'BER_VERSION', '1.0.0' );
 define( 'BER_FILE', __FILE__ );
 define( 'BER_PATH', plugin_dir_path( __FILE__ ) );
+
+load_plugin_textdomain( 'bar-email-reminder', false, dirname( plugin_basename( BER_FILE ) ) . '/languages' );
 
 require_once BER_PATH . 'includes/class-ber-reminder-post-type.php';
 require_once BER_PATH . 'includes/class-ber-team-post-type.php';

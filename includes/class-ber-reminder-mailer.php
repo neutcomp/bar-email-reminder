@@ -10,8 +10,8 @@ class BER_Reminder_Mailer {
 	public static function get_settings() {
 		$defaults = array(
 			'from_email' => get_option( 'admin_email' ),
-			'subject'    => 'Bardienst reminder voor {name}',
-			'message'    => "Hallo {name},\n\nDit is je herinnering voor de bardienst bij The Victory.\n\nTeam: {team}\nDatum bardienst: {date}\n\nMet vriendelijke groet,\nThe Victory",
+			'subject'    => __( 'Bar duty reminder for {name}', 'bar-email-reminder' ),
+			'message'    => __( "Hello {name},\n\nThis is your reminder for bar duty at The Victory.\n\nTeam: {team}\nBar duty date: {date}\n\nKind regards,\nThe Victory", 'bar-email-reminder' ),
 		);
 
 		return wp_parse_args( get_option( self::SETTINGS_OPTION, array() ), $defaults );

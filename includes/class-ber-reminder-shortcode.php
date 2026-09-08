@@ -59,17 +59,17 @@ class BER_Reminder_Shortcode {
 		<table class="ber-bardienst-table<?php echo $split ? ' ber-bardienst-table-split' : ''; ?>">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Datum', 'bar-email-reminder' ); ?></th>
+					<th><?php esc_html_e( 'Date', 'bar-email-reminder' ); ?></th>
 					<th><?php esc_html_e( 'Team', 'bar-email-reminder' ); ?></th>
 					<?php if ( $split ) : ?>
-						<th><?php esc_html_e( 'Datum', 'bar-email-reminder' ); ?></th>
+						<th><?php esc_html_e( 'Date', 'bar-email-reminder' ); ?></th>
 						<th><?php esc_html_e( 'Team', 'bar-email-reminder' ); ?></th>
 					<?php endif; ?>
 				</tr>
 			</thead>
 			<tbody>
 			<?php if ( ! $reminders ) : ?>
-				<tr><td colspan="<?php echo $split ? '4' : '2'; ?>"><?php esc_html_e( 'Geen bardiensten gevonden.', 'bar-email-reminder' ); ?></td></tr>
+				<tr><td colspan="<?php echo $split ? '4' : '2'; ?>"><?php esc_html_e( 'No bar duties found.', 'bar-email-reminder' ); ?></td></tr>
 			<?php elseif ( $split ) : ?>
 				<?php foreach ( $columns[0] as $index => $reminder ) : ?>
 					<?php $second = isset( $columns[1][ $index ] ) ? $columns[1][ $index ] : null; ?>
@@ -98,11 +98,6 @@ class BER_Reminder_Shortcode {
 			return $date->format( 'd-m-Y' );
 		}
 
-		$weekdays = array( 'zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag' );
-		$months   = array( 1 => 'januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december' );
-		$weekday  = ucfirst( $weekdays[ (int) $date->format( 'w' ) ] );
-		$month    = $months[ (int) $date->format( 'n' ) ];
-
-		return sprintf( '%s %s %s', $weekday, $date->format( 'j' ), $month );
+		return wp_date( 'l j F', $date->getTimestamp(), wp_timezone() );
 	}
 }

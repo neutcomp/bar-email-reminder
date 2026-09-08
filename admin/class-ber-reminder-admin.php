@@ -23,8 +23,8 @@ class BER_Reminder_Admin {
 
 	public static function menu() {
 		add_menu_page(
-			__( 'Bar e-mailherinneringen', 'bar-email-reminder' ),
-			__( 'Herinneringen', 'bar-email-reminder' ),
+			__( 'Bar email reminders', 'bar-email-reminder' ),
+			__( 'Reminders', 'bar-email-reminder' ),
 			self::CAPABILITY,
 			self::PAGE,
 			array( __CLASS__, 'render' ),
@@ -41,8 +41,8 @@ class BER_Reminder_Admin {
 		);
 		add_submenu_page(
 			self::PAGE,
-			__( 'E-mailinstellingen', 'bar-email-reminder' ),
-			__( 'E-mailinstellingen', 'bar-email-reminder' ),
+			__( 'Email settings', 'bar-email-reminder' ),
+			__( 'Email settings', 'bar-email-reminder' ),
 			self::CAPABILITY,
 			self::SETTINGS_PAGE,
 			array( __CLASS__, 'render_settings' )
@@ -51,7 +51,7 @@ class BER_Reminder_Admin {
 
 	public static function render() {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'Je hebt geen toestemming om herinneringen te beheren.', 'bar-email-reminder' ) );
+			wp_die( esc_html__( 'You do not have permission to manage reminders.', 'bar-email-reminder' ) );
 		}
 
 		$edit_id  = isset( $_GET['edit'] ) ? absint( $_GET['edit'] ) : 0;
@@ -76,27 +76,27 @@ class BER_Reminder_Admin {
 		);
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Bar e-mailherinneringen', 'bar-email-reminder' ); ?></h1>
+			<h1><?php esc_html_e( 'Bar email reminders', 'bar-email-reminder' ); ?></h1>
 			<?php self::notice(); ?>
 			<p>
 				<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_run_cron' ), 'ber_run_cron' ) ); ?>">
-					<?php esc_html_e( 'Herinneringen nu controleren', 'bar-email-reminder' ); ?>
+					<?php esc_html_e( 'Check reminders now', 'bar-email-reminder' ); ?>
 				</a>
 			</p>
-			<h2><?php echo $editing['id'] ? esc_html__( 'Herinnering bewerken', 'bar-email-reminder' ) : esc_html__( 'Herinnering toevoegen', 'bar-email-reminder' ); ?></h2>
+			<h2><?php echo $editing['id'] ? esc_html__( 'Edit reminder', 'bar-email-reminder' ) : esc_html__( 'Add reminder', 'bar-email-reminder' ); ?></h2>
 			<form class="ber-reminder-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="ber_save_reminder">
 				<input type="hidden" name="reminder_id" value="<?php echo esc_attr( $editing['id'] ); ?>">
 				<?php wp_nonce_field( 'ber_save_reminder' ); ?>
 				<table class="form-table" role="presentation">
-					<tr><th><label for="ber-name">Naam</label></th><td><input required class="regular-text" id="ber-name" name="name" value="<?php echo esc_attr( $editing['name'] ); ?>"></td></tr>
-					<tr><th><label for="ber-team">Team</label></th><td><select required class="regular-text" id="ber-team" name="team_id"><option value=""><?php esc_html_e( 'Selecteer een team', 'bar-email-reminder' ); ?></option><?php foreach ( $teams as $team ) : ?><option value="<?php echo esc_attr( $team['id'] ); ?>" <?php selected( $editing['team_id'], $team['id'] ); ?>><?php echo esc_html( $team['name'] ); ?></option><?php endforeach; ?></select><?php if ( ! $teams ) : ?><p class="description"><?php esc_html_e( 'Maak eerst een team aan.', 'bar-email-reminder' ); ?></p><?php endif; ?></td></tr>
-					<tr><th><label for="ber-date">Datum</label></th><td><input required type="date" id="ber-date" name="date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( $editing['date'] ); ?>"></td></tr>
+					<tr><th><label for="ber-name"><?php esc_html_e( 'Name', 'bar-email-reminder' ); ?></label></th><td><input required class="regular-text" id="ber-name" name="name" value="<?php echo esc_attr( $editing['name'] ); ?>"></td></tr>
+					<tr><th><label for="ber-team"><?php esc_html_e( 'Team', 'bar-email-reminder' ); ?></label></th><td><select required class="regular-text" id="ber-team" name="team_id"><option value=""><?php esc_html_e( 'Select a team', 'bar-email-reminder' ); ?></option><?php foreach ( $teams as $team ) : ?><option value="<?php echo esc_attr( $team['id'] ); ?>" <?php selected( $editing['team_id'], $team['id'] ); ?>><?php echo esc_html( $team['name'] ); ?></option><?php endforeach; ?></select><?php if ( ! $teams ) : ?><p class="description"><?php esc_html_e( 'Create a team first.', 'bar-email-reminder' ); ?></p><?php endif; ?></td></tr>
+					<tr><th><label for="ber-date"><?php esc_html_e( 'Date', 'bar-email-reminder' ); ?></label></th><td><input required type="date" id="ber-date" name="date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( $editing['date'] ); ?>"></td></tr>
 				</table>
-				<?php submit_button( $editing['id'] ? __( 'Herinnering bijwerken', 'bar-email-reminder' ) : __( 'Herinnering toevoegen', 'bar-email-reminder' ) ); ?>
+				<?php submit_button( $editing['id'] ? __( 'Update reminder', 'bar-email-reminder' ) : __( 'Add reminder', 'bar-email-reminder' ) ); ?>
 			</form>
 			<hr>
-			<h2><?php esc_html_e( 'Overzicht', 'bar-email-reminder' ); ?></h2>
+			<h2><?php esc_html_e( 'Overview', 'bar-email-reminder' ); ?></h2>
 			<style>
 				.ber-status-not-sent { color: #b32d2e; font-weight: 600; }
 				.ber-status-sent { color: #008a20; font-weight: 600; }
@@ -111,20 +111,20 @@ class BER_Reminder_Admin {
 				<input type="hidden" name="action" value="ber_bulk_delete_reminders">
 				<?php wp_nonce_field( 'ber_bulk_delete_reminders' ); ?>
 			<table class="widefat fixed striped ber-reminder-table">
-				<thead><tr><th class="check-column"><input type="checkbox" aria-label="Alles selecteren"></th><th>Naam</th><th>Team</th><th>Datum</th><th>Status</th><th><?php esc_html_e( 'Acties', 'bar-email-reminder' ); ?></th></tr></thead>
+				<thead><tr><th class="check-column"><input type="checkbox" aria-label="<?php esc_attr_e( 'Select all', 'bar-email-reminder' ); ?>"></th><th><?php esc_html_e( 'Name', 'bar-email-reminder' ); ?></th><th><?php esc_html_e( 'Team', 'bar-email-reminder' ); ?></th><th><?php esc_html_e( 'Date', 'bar-email-reminder' ); ?></th><th><?php esc_html_e( 'Status', 'bar-email-reminder' ); ?></th><th><?php esc_html_e( 'Actions', 'bar-email-reminder' ); ?></th></tr></thead>
 				<tbody>
 				<?php if ( ! $reminder_ids ) : ?>
-					<tr><td colspan="6"><?php esc_html_e( 'Geen herinneringen gevonden.', 'bar-email-reminder' ); ?></td></tr>
+					<tr><td colspan="6"><?php esc_html_e( 'No reminders found.', 'bar-email-reminder' ); ?></td></tr>
 				<?php else : foreach ( $reminder_ids as $reminder_id ) : $reminder = BER_Reminder_Post_Type::get( $reminder_id ); ?>
 					<tr>
-						<td class="check-column"><input type="checkbox" name="reminder_ids[]" value="<?php echo esc_attr( $reminder_id ); ?>" aria-label="Selecteer <?php echo esc_attr( $reminder['name'] ); ?>"></td><td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( self::get_team_name( $reminder['team_id'] ) ); ?></td><td><?php echo esc_html( self::format_date( $reminder['date'] ) ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span></td>
-						<td><a href="<?php echo esc_url( admin_url( 'admin.php?page=' . self::PAGE . '&edit=' . $reminder_id ) ); ?>">Bewerken</a> | <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_delete_reminder&reminder_id=' . $reminder_id ), 'ber_delete_reminder_' . $reminder_id ) ); ?>" onclick="return confirm('Deze herinnering verwijderen?');">Verwijderen</a></td>
+						<td class="check-column"><input type="checkbox" name="reminder_ids[]" value="<?php echo esc_attr( $reminder_id ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Select %s', 'bar-email-reminder' ), $reminder['name'] ) ); ?>"></td><td><?php echo esc_html( $reminder['name'] ); ?></td><td><?php echo esc_html( self::get_team_name( $reminder['team_id'] ) ); ?></td><td><?php echo esc_html( self::format_date( $reminder['date'] ) ); ?></td><td><span class="ber-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span></td>
+						<td><a href="<?php echo esc_url( admin_url( 'admin.php?page=' . self::PAGE . '&edit=' . $reminder_id ) ); ?>"><?php esc_html_e( 'Edit', 'bar-email-reminder' ); ?></a> | <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_delete_reminder&reminder_id=' . $reminder_id ), 'ber_delete_reminder_' . $reminder_id ) ); ?>" onclick="return confirm('<?php echo esc_js( __( 'Delete this reminder?', 'bar-email-reminder' ) ); ?>');"><?php esc_html_e( 'Delete', 'bar-email-reminder' ); ?></a></td>
 					</tr>
 				<?php endforeach; endif; ?>
 				</tbody>
 			</table>
 			<div class="ber-bulk-delete-submit">
-				<?php submit_button( __( 'Geselecteerde herinneringen verwijderen', 'bar-email-reminder' ), 'delete', 'submit', false, array( 'onclick' => "return confirm('De geselecteerde herinneringen verwijderen?');" ) ); ?>
+				<?php submit_button( __( 'Delete selected reminders', 'bar-email-reminder' ), 'delete', 'submit', false, array( 'onclick' => "return confirm('" . esc_js( __( 'Delete the selected reminders?', 'bar-email-reminder' ) ) . "');" ) ); ?>
 			</div>
 			</form>
 		</div>
@@ -172,26 +172,26 @@ class BER_Reminder_Admin {
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Teams', 'bar-email-reminder' ); ?></h1>
 			<?php self::notice(); ?>
-			<h2><?php echo $editing['id'] ? esc_html__( 'Team bewerken', 'bar-email-reminder' ) : esc_html__( 'Team toevoegen', 'bar-email-reminder' ); ?></h2>
+			<h2><?php echo $editing['id'] ? esc_html__( 'Edit team', 'bar-email-reminder' ) : esc_html__( 'Add team', 'bar-email-reminder' ); ?></h2>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="ber_save_team">
 				<input type="hidden" name="team_id" value="<?php echo esc_attr( $editing['id'] ); ?>">
 				<?php wp_nonce_field( 'ber_save_team' ); ?>
 				<table class="form-table" role="presentation">
-					<tr><th><label for="ber-team-name">Naam</label></th><td><input required class="regular-text" id="ber-team-name" name="name" value="<?php echo esc_attr( $editing['name'] ); ?>"></td></tr>
-					<tr><th><label for="ber-team-email">E-mailadres</label></th><td><input required type="text" class="regular-text" id="ber-team-email" name="email" value="<?php echo esc_attr( $editing['email'] ); ?>"><p class="description"><?php esc_html_e( 'Scheid meerdere e-mailadressen met puntkomma\'s.', 'bar-email-reminder' ); ?></p></td></tr>
+					<tr><th><label for="ber-team-name"><?php esc_html_e( 'Name', 'bar-email-reminder' ); ?></label></th><td><input required class="regular-text" id="ber-team-name" name="name" value="<?php echo esc_attr( $editing['name'] ); ?>"></td></tr>
+					<tr><th><label for="ber-team-email"><?php esc_html_e( 'Email address', 'bar-email-reminder' ); ?></label></th><td><input required type="text" class="regular-text" id="ber-team-email" name="email" value="<?php echo esc_attr( $editing['email'] ); ?>"><p class="description"><?php esc_html_e( 'Separate multiple email addresses with semicolons.', 'bar-email-reminder' ); ?></p></td></tr>
 				</table>
-				<?php submit_button( $editing['id'] ? __( 'Team bijwerken', 'bar-email-reminder' ) : __( 'Team toevoegen', 'bar-email-reminder' ) ); ?>
+				<?php submit_button( $editing['id'] ? __( 'Update team', 'bar-email-reminder' ) : __( 'Add team', 'bar-email-reminder' ) ); ?>
 			</form>
 			<hr>
-			<h2><?php esc_html_e( 'Overzicht', 'bar-email-reminder' ); ?></h2>
+			<h2><?php esc_html_e( 'Overview', 'bar-email-reminder' ); ?></h2>
 			<table class="widefat fixed striped">
-				<thead><tr><th>Naam</th><th>E-mailadres</th><th><?php esc_html_e( 'Acties', 'bar-email-reminder' ); ?></th></tr></thead>
+				<thead><tr><th><?php esc_html_e( 'Name', 'bar-email-reminder' ); ?></th><th><?php esc_html_e( 'Email address', 'bar-email-reminder' ); ?></th><th><?php esc_html_e( 'Actions', 'bar-email-reminder' ); ?></th></tr></thead>
 				<tbody>
 				<?php if ( ! $teams ) : ?>
-					<tr><td colspan="3"><?php esc_html_e( 'Geen teams gevonden.', 'bar-email-reminder' ); ?></td></tr>
+					<tr><td colspan="3"><?php esc_html_e( 'No teams found.', 'bar-email-reminder' ); ?></td></tr>
 				<?php else : foreach ( $teams as $team ) : ?>
-					<tr><td><?php echo esc_html( $team['name'] ); ?></td><td><?php echo esc_html( $team['email'] ); ?></td><td><a href="<?php echo esc_url( admin_url( 'admin.php?page=' . self::TEAMS_PAGE . '&edit=' . $team['id'] ) ); ?>">Bewerken</a> | <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_delete_team&team_id=' . $team['id'] ), 'ber_delete_team_' . $team['id'] ) ); ?>" onclick="return confirm('Dit team verwijderen?');">Verwijderen</a></td></tr>
+					<tr><td><?php echo esc_html( $team['name'] ); ?></td><td><?php echo esc_html( $team['email'] ); ?></td><td><a href="<?php echo esc_url( admin_url( 'admin.php?page=' . self::TEAMS_PAGE . '&edit=' . $team['id'] ) ); ?>"><?php esc_html_e( 'Edit', 'bar-email-reminder' ); ?></a> | <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ber_delete_team&team_id=' . $team['id'] ), 'ber_delete_team_' . $team['id'] ) ); ?>" onclick="return confirm('<?php echo esc_js( __( 'Delete this team?', 'bar-email-reminder' ) ); ?>');"><?php esc_html_e( 'Delete', 'bar-email-reminder' ); ?></a></td></tr>
 				<?php endforeach; endif; ?>
 				</tbody>
 			</table>
@@ -295,22 +295,22 @@ class BER_Reminder_Admin {
 		$settings = BER_Reminder_Mailer::get_settings();
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'E-mailinstellingen', 'bar-email-reminder' ); ?></h1>
+			<h1><?php esc_html_e( 'Email settings', 'bar-email-reminder' ); ?></h1>
 			<?php self::notice(); ?>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="ber_save_settings">
 				<?php wp_nonce_field( 'ber_save_settings' ); ?>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th><label for="ber-from-email">Afzender e-mailadres</label></th>
+						<th><label for="ber-from-email"><?php esc_html_e( 'Sender email address', 'bar-email-reminder' ); ?></label></th>
 						<td><input required type="email" class="regular-text" id="ber-from-email" name="from_email" value="<?php echo esc_attr( $settings['from_email'] ); ?>"></td>
 					</tr>
 					<tr>
-						<th><label for="ber-email-subject">Onderwerp van e-mail</label></th>
+						<th><label for="ber-email-subject"><?php esc_html_e( 'Email subject', 'bar-email-reminder' ); ?></label></th>
 						<td><input required class="large-text" id="ber-email-subject" name="subject" value="<?php echo esc_attr( $settings['subject'] ); ?>"></td>
 					</tr>
 					<tr>
-						<th><label for="ber-email-message">Bericht van e-mail</label></th>
+						<th><label for="ber-email-message"><?php esc_html_e( 'Email message', 'bar-email-reminder' ); ?></label></th>
 						<td>
 							<?php
 							wp_editor(
@@ -324,11 +324,11 @@ class BER_Reminder_Admin {
 								)
 							);
 							?>
-							<p class="description"><?php esc_html_e( 'Beschikbare invulvelden: {name}, {team} en {date}.', 'bar-email-reminder' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Available placeholders: {name}, {team}, and {date}.', 'bar-email-reminder' ); ?></p>
 						</td>
 					</tr>
 				</table>
-				<?php submit_button( __( 'E-mailinstellingen opslaan', 'bar-email-reminder' ) ); ?>
+				<?php submit_button( __( 'Save email settings', 'bar-email-reminder' ) ); ?>
 			</form>
 		</div>
 		<?php
@@ -360,7 +360,7 @@ class BER_Reminder_Admin {
 
 	private static function check_access() {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'Je hebt geen toestemming om herinneringen te beheren.', 'bar-email-reminder' ) );
+			wp_die( esc_html__( 'You do not have permission to manage reminders.', 'bar-email-reminder' ) );
 		}
 	}
 
@@ -393,7 +393,7 @@ class BER_Reminder_Admin {
 
 	private static function get_team_name( $team_id ) {
 		if ( ! $team_id || BER_Team_Post_Type::POST_TYPE !== get_post_type( $team_id ) ) {
-			return __( 'Onbekend team', 'bar-email-reminder' );
+			return __( 'Unknown team', 'bar-email-reminder' );
 		}
 
 		return BER_Team_Post_Type::get( $team_id )['name'];
@@ -420,9 +420,9 @@ class BER_Reminder_Admin {
 
 	private static function get_status_label( $status ) {
 		$labels = array(
-			'not-sent' => 'Niet verzonden',
-			'sent'     => 'Verzonden',
-			'missed'   => 'Gemist',
+			'not-sent' => __( 'Not sent', 'bar-email-reminder' ),
+			'sent'     => __( 'Sent', 'bar-email-reminder' ),
+			'missed'   => __( 'Missed', 'bar-email-reminder' ),
 		);
 
 		return isset( $labels[ $status ] ) ? $labels[ $status ] : $status;
@@ -432,15 +432,15 @@ class BER_Reminder_Admin {
 		if ( empty( $_GET['message'] ) ) {
 			return;
 		}
-		$messages = array( 'saved' => 'Herinnering opgeslagen.', 'deleted' => 'Herinnering verwijderd.', 'error' => 'Controleer de velden.', 'cron-run' => 'Controle van herinneringen voltooid.', 'settings-saved' => 'E-mailinstellingen opgeslagen.', 'team-saved' => 'Team opgeslagen.', 'team-deleted' => 'Team verwijderd.', 'team-in-use' => 'Dit team kan niet worden verwijderd omdat het nog aan een herinnering is gekoppeld.' );
+		$messages = array( 'saved' => __( 'Reminder saved.', 'bar-email-reminder' ), 'deleted' => __( 'Reminder deleted.', 'bar-email-reminder' ), 'error' => __( 'Please check the fields.', 'bar-email-reminder' ), 'cron-run' => __( 'Reminder check completed.', 'bar-email-reminder' ), 'settings-saved' => __( 'Email settings saved.', 'bar-email-reminder' ), 'team-saved' => __( 'Team saved.', 'bar-email-reminder' ), 'team-deleted' => __( 'Team deleted.', 'bar-email-reminder' ), 'team-in-use' => __( 'This team cannot be deleted because it is still linked to a reminder.', 'bar-email-reminder' ) );
 		$key      = sanitize_key( wp_unslash( $_GET['message'] ) );
 		if ( 0 === strpos( $key, 'bulk-deleted-' ) ) {
 			$count = absint( substr( $key, strlen( 'bulk-deleted-' ) ) );
-			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( sprintf( _n( '%d herinnering verwijderd.', '%d herinneringen verwijderd.', $count, 'bar-email-reminder' ), $count ) ) . '</p></div>';
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( sprintf( _n( '%d reminder deleted.', '%d reminders deleted.', $count, 'bar-email-reminder' ), $count ) ) . '</p></div>';
 			return;
 		}
 		if ( 'nothing-selected' === $key ) {
-			echo '<div class="notice notice-warning is-dismissible"><p>' . esc_html__( 'Selecteer eerst minstens één herinnering.', 'bar-email-reminder' ) . '</p></div>';
+			echo '<div class="notice notice-warning is-dismissible"><p>' . esc_html__( 'Select at least one reminder first.', 'bar-email-reminder' ) . '</p></div>';
 			return;
 		}
 		if ( isset( $messages[ $key ] ) ) {
