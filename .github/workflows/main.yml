@@ -18,7 +18,7 @@ jobs:
         timeout: 60000
         protocol: ftps
         local-dir: ./
-        server-dir: ./httpdocs/wp-content/plugins/bar-email-reminder/
+        server-dir: ./httpdocs/wp-content/plugins/team-email-reminder/
         exclude: |
           *.git
           *.github

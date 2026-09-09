@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class BER_Reminder_Post_Type {
-	const POST_TYPE = 'ber_reminder';
+class TER_Reminder_Post_Type {
+	const POST_TYPE = 'ter_reminder';
 
-	const NAME_META   = '_ber_name';
-	const EMAIL_META  = '_ber_email';
-	const TEAM_META   = '_ber_team_id';
-	const DATE_META   = '_ber_date';
-	const STATUS_META = '_ber_status';
+	const NAME_META   = '_ter_name';
+	const EMAIL_META  = '_ter_email';
+	const TEAM_META   = '_ter_team_id';
+	const DATE_META   = '_ter_date';
+	const STATUS_META = '_ter_status';
 
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register' ) );
@@ -22,8 +22,8 @@ class BER_Reminder_Post_Type {
 			self::POST_TYPE,
 			array(
 				'labels'             => array(
-					'name'          => __( 'Reminders', 'bar-email-reminder' ),
-					'singular_name' => __( 'Reminder', 'bar-email-reminder' ),
+					'name'          => __( 'Reminders', 'team-email-reminder' ),
+					'singular_name' => __( 'Reminder', 'team-email-reminder' ),
 				),
 				'public'            => false,
 				'show_ui'           => false,

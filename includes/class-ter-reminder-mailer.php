@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class BER_Reminder_Mailer {
-	const SETTINGS_OPTION = 'ber_reminder_email_settings';
+class TER_Reminder_Mailer {
+	const SETTINGS_OPTION = 'ter_reminder_email_settings';
 
 	public static function get_settings() {
 		$defaults = array(
 			'from_email' => get_option( 'admin_email' ),
-			'subject'    => __( 'Bar duty reminder for {name}', 'bar-email-reminder' ),
-			'message'    => __( "Hello {name},\n\nThis is your reminder for bar duty at The Victory.\n\nTeam: {team}\nBar duty date: {date}\n\nKind regards,\nThe Victory", 'bar-email-reminder' ),
+			'subject'    => __( 'Team reminder for {name}', 'team-email-reminder' ),
+			'message'    => __( "Hello {name},\n\nThis is your reminder for team duty at The Victory.\n\nTeam: {team}\nTeam duty date: {date}\n\nKind regards,\nThe Victory", 'team-email-reminder' ),
 		);
 
 		return wp_parse_args( get_option( self::SETTINGS_OPTION, array() ), $defaults );
@@ -20,7 +20,7 @@ class BER_Reminder_Mailer {
 	public static function send( $reminder ) {
 		$date = DateTimeImmutable::createFromFormat( '!Y-m-d', $reminder['date'], wp_timezone() );
 		$date = $date ? $date->format( 'd-m-Y' ) : $reminder['date'];
-		$team = ! empty( $reminder['team_id'] ) && BER_Team_Post_Type::POST_TYPE === get_post_type( $reminder['team_id'] ) ? BER_Team_Post_Type::get( $reminder['team_id'] )['name'] : '';
+		$team = ! empty( $reminder['team_id'] ) && TER_Team_Post_Type::POST_TYPE === get_post_type( $reminder['team_id'] ) ? TER_Team_Post_Type::get( $reminder['team_id'] )['name'] : '';
 		$settings = self::get_settings();
 		$replacements = array(
 			'{name}' => $reminder['name'],
@@ -40,10 +40,10 @@ class BER_Reminder_Mailer {
 	}
 
 	public static function get_recipients( $reminder ) {
-		if ( ! empty( $reminder['team_id'] ) && BER_Team_Post_Type::POST_TYPE === get_post_type( $reminder['team_id'] ) ) {
-			return BER_Team_Post_Type::get_emails( $reminder['team_id'] );
+		if ( ! empty( $reminder['team_id'] ) && TER_Team_Post_Type::POST_TYPE === get_post_type( $reminder['team_id'] ) ) {
+			return TER_Team_Post_Type::get_emails( $reminder['team_id'] );
 		}
 
-		return BER_Reminder_Post_Type::get_emails( $reminder['email'] );
+		return TER_Reminder_Post_Type::get_emails( $reminder['email'] );
 	}
 }

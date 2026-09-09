@@ -1,6 +1,6 @@
-# Bar Email Reminder
+# Team Email Reminder
 
-Bar Email Reminder is a small WordPress plugin for managing dated email reminders.
+Team Email Reminder is a small WordPress plugin for managing dated email reminders.
 
 ## Features
 
@@ -17,29 +17,29 @@ Bar Email Reminder is a small WordPress plugin for managing dated email reminder
 - Includes an administrator button to run the reminder check immediately.
 - Includes an Email Settings page where administrators can change the From address, subject, and message.
 - The email message uses the WordPress HTML editor and supports safe formatting such as bold text.
-- Provides a `[bardienst]` shortcode for displaying a public table with the date and name of each reminder.
+- Provides a `[schedule]` shortcode for displaying a public table with the date and name of each reminder.
 - Supports English and Dutch based on the WordPress site language.
 
 The email template supports `{name}`, `{team}`, and `{date}` placeholders. The date placeholder is formatted as `dd-mm-yyyy`.
 
 ## Shortcode
 
-Add `[bardienst]` to a post or page. It displays reminders sorted by date with a Dutch date format such as `Donderdag 10 augustus`. Add `split="true"` to display two date/team pairs next to each other:
+Add `[schedule]` to a post or page. It displays reminders sorted by date with a Dutch date format such as `Donderdag 10 augustus`. Add `split="true"` to display two date/team pairs next to each other:
 
 ```text
-[bardienst split="true"]
+[schedule split="true"]
 ```
 
 Use `dateFormat="short"` for numeric dates in `dd-mm-yyyy` format. Parameters can be combined:
 
 ```text
-[bardienst split="true" dateFormat="short"]
+[schedule split="true" dateFormat="short"]
 ```
 
 ## Installation
 
-1. Copy this directory to `wp-content/plugins/bar-email-reminder`.
-2. Activate **Bar Email Reminder** from the WordPress Plugins screen.
+1. Copy this directory to `wp-content/plugins/team-email-reminder`.
+2. Activate **Team Email Reminder** from the WordPress Plugins screen.
 3. Open **Reminders** in the WordPress administration menu.
 4. Open **Teams** to create the teams that can be selected on reminders.
 

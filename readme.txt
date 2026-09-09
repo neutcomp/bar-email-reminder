@@ -1,4 +1,4 @@
-=== Bar Email Reminder ===
+=== Team Email Reminder ===
 Contributors: neutcomp
 Tags: reminders, email, scheduling, wp-cron, teams
 Requires at least: 5.8
@@ -12,7 +12,7 @@ Manage dated reminders for teams and send notification emails two days before ea
 
 == Description ==
 
-Bar Email Reminder helps administrators and editors manage dated team reminders and automatically notify the selected team by email.
+Team Email Reminder helps administrators and editors manage dated team reminders and automatically notify the selected team by email.
 
 Features include:
 
@@ -25,7 +25,7 @@ Features include:
 * Track reminders as not sent, sent, or missed.
 * Delete multiple reminders at once.
 * Customize the sender address, subject, and email message.
-* Use the `[bardienst]` shortcode to display reminders in a public table.
+* Use the `[schedule]` shortcode to display reminders in a public table.
 * Display one or two date and team columns with the `split="true"` attribute.
 * Display numeric dates with the `dateFormat="short"` attribute.
 * Support English and Dutch based on the WordPress site language.
@@ -40,13 +40,13 @@ The plugin uses the site's configured timezone for date validation, display, and
 
 == Installation ==
 
-1. Upload the `bar-email-reminder` directory to the `/wp-content/plugins/` directory, or install the plugin through the WordPress Plugins screen.
+1. Upload the `team-email-reminder` directory to the `/wp-content/plugins/` directory, or install the plugin through the WordPress Plugins screen.
 2. Activate the plugin through the Plugins screen in WordPress.
 3. Open **Reminders** in the WordPress administration menu.
 4. Open **Teams** and add at least one team with one or more valid email addresses.
 5. Create a reminder and assign it to a team.
 6. Optionally open **Email settings** to customize the sender, subject, and message.
-7. Add `[bardienst]` to a post or page to display the reminders publicly.
+7. Add `[schedule]` to a post or page to display the reminders publicly.
 
 For reliable email delivery, configure WordPress with a suitable SMTP or transactional email provider.
 
@@ -74,7 +74,7 @@ Open **Reminders > Email settings** in the WordPress administration area. You ca
 
 = How do I display reminders on a page? =
 
-Add `[bardienst]` to the page or post. Use `[bardienst split="true"]` for two date and team pairs per row, or `[bardienst dateFormat="short"]` for numeric dates.
+Add `[schedule]` to the page or post. Use `[schedule split="true"]` for two date and team pairs per row, or `[schedule dateFormat="short"]` for numeric dates.
 
 = Which languages are supported? =
 
@@ -82,27 +82,27 @@ English and Dutch are included. The plugin follows the language configured for t
 
 == Screenshots ==
 
-![Reminder menu](https://ps.w.org/bar-email-reminder/assets/reminder-menu.png)
+![Reminder menu](https://ps.w.org/team-email-reminder/assets/reminder-menu.png)
 
-The WordPress administration menu for Bar Email Reminder.
+The WordPress administration menu for Team Email Reminder.
 
-![Reminder list](https://ps.w.org/bar-email-reminder/assets/reminder-list.png)
+![Reminder list](https://ps.w.org/team-email-reminder/assets/reminder-list.png)
 
 The reminder overview with reminder status and actions.
 
-![Add reminder](https://ps.w.org/bar-email-reminder/assets/reminder-add.png)
+![Add reminder](https://ps.w.org/team-email-reminder/assets/reminder-add.png)
 
 The form for adding or editing a reminder.
 
-![Teams overview](https://ps.w.org/bar-email-reminder/assets/teams-overview.png)
+![Teams overview](https://ps.w.org/team-email-reminder/assets/teams-overview.png)
 
 The teams overview.
 
-![Add team](https://ps.w.org/bar-email-reminder/assets/teams-add.png)
+![Add team](https://ps.w.org/team-email-reminder/assets/teams-add.png)
 
 The form for adding or editing a team.
 
-![Email settings](https://ps.w.org/bar-email-reminder/assets/email-settings.png)
+![Email settings](https://ps.w.org/team-email-reminder/assets/email-settings.png)
 
 The email settings screen.
 
@@ -113,7 +113,7 @@ The email settings screen.
 * Added reminder and team management.
 * Added scheduled email notifications.
 * Added customizable email settings.
-* Added the `[bardienst]` shortcode.
+* Added the `[schedule]` shortcode.
 * Added English and Dutch translations.
 
 == Upgrade Notice ==

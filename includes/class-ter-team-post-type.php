@@ -4,11 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class BER_Team_Post_Type {
-	const POST_TYPE = 'ber_team';
+class TER_Team_Post_Type {
+	const POST_TYPE = 'ter_team';
 
-	const NAME_META  = '_ber_team_name';
-	const EMAIL_META = '_ber_team_email';
+	const NAME_META  = '_ter_team_name';
+	const EMAIL_META = '_ter_team_email';
 
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register' ) );
@@ -19,8 +19,8 @@ class BER_Team_Post_Type {
 			self::POST_TYPE,
 			array(
 				'labels'           => array(
-					'name'          => __( 'Teams', 'bar-email-reminder' ),
-					'singular_name' => __( 'Team', 'bar-email-reminder' ),
+					'name'          => __( 'Teams', 'team-email-reminder' ),
+					'singular_name' => __( 'Team', 'team-email-reminder' ),
 				),
 				'public'          => false,
 				'show_ui'         => false,
@@ -65,12 +65,12 @@ class BER_Team_Post_Type {
 	public static function get_emails( $team_id ) {
 		$team = self::get( $team_id );
 
-		return BER_Reminder_Post_Type::get_emails( $team['email'] );
+		return TER_Reminder_Post_Type::get_emails( $team['email'] );
 	}
 
 	public static function save( $post_id, $fields ) {
 		$name   = sanitize_text_field( $fields['name'] );
-		$emails = implode( ';', BER_Reminder_Post_Type::get_emails( $fields['email'] ) );
+		$emails = implode( ';', TER_Reminder_Post_Type::get_emails( $fields['email'] ) );
 
 		wp_update_post( array( 'ID' => $post_id, 'post_title' => $name ) );
 		update_post_meta( $post_id, self::NAME_META, $name );

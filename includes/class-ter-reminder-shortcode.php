@@ -4,18 +4,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class BER_Reminder_Shortcode {
+class TER_Reminder_Shortcode {
 	public static function init() {
-		add_shortcode( 'bardienst', array( __CLASS__, 'render' ) );
+		add_shortcode( 'schedule', array( __CLASS__, 'render' ) );
 	}
 
 	public static function render( $atts ) {
-		$atts        = shortcode_atts( array( 'split' => 'false', 'dateformat' => 'long' ), $atts, 'bardienst' );
+		$atts        = shortcode_atts( array( 'split' => 'false', 'dateformat' => 'long' ), $atts, 'schedule' );
 		$split       = 'true' === strtolower( (string) $atts['split'] );
 		$date_format = 'short' === strtolower( (string) $atts['dateformat'] ) ? 'short' : 'long';
 		$reminder_ids = get_posts(
 			array(
-				'post_type'      => BER_Reminder_Post_Type::POST_TYPE,
+				'post_type'      => TER_Reminder_Post_Type::POST_TYPE,
 				'post_status'    => 'any',
 				'posts_per_page' => -1,
 				'fields'         => 'ids',
@@ -24,7 +24,7 @@ class BER_Reminder_Shortcode {
 		$reminders = array();
 
 		foreach ( $reminder_ids as $reminder_id ) {
-			$reminder = BER_Reminder_Post_Type::get( $reminder_id );
+			$reminder = TER_Reminder_Post_Type::get( $reminder_id );
 			$date     = DateTimeImmutable::createFromFormat( '!Y-m-d', $reminder['date'], wp_timezone() );
 
 			if ( ! $date || $date->format( 'Y-m-d' ) !== $reminder['date'] ) {
@@ -48,28 +48,28 @@ class BER_Reminder_Shortcode {
 		ob_start();
 		?>
 		<style>
-			.ber-bardienst-table { width: 100%; }
-			.ber-bardienst-table th,
-			.ber-bardienst-table td { padding: 10px 12px; }
-			.ber-bardienst-table tbody tr { background-color: #fff; }
-			.ber-bardienst-table tbody tr:nth-child(even) { background-color: #f0f0f0; }
-			.ber-bardienst-table.ber-bardienst-table-split th,
-			.ber-bardienst-table.ber-bardienst-table-split td { width: 25%; }
+			.ter-schedule-table { width: 100%; }
+			.ter-schedule-table th,
+			.ter-schedule-table td { padding: 10px 12px; }
+			.ter-schedule-table tbody tr { background-color: #fff; }
+			.ter-schedule-table tbody tr:nth-child(even) { background-color: #f0f0f0; }
+			.ter-schedule-table.ter-schedule-table-split th,
+			.ter-schedule-table.ter-schedule-table-split td { width: 25%; }
 		</style>
-		<table class="ber-bardienst-table<?php echo $split ? ' ber-bardienst-table-split' : ''; ?>">
+		<table class="ter-schedule-table<?php echo $split ? ' ter-schedule-table-split' : ''; ?>">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Date', 'bar-email-reminder' ); ?></th>
-					<th><?php esc_html_e( 'Team', 'bar-email-reminder' ); ?></th>
+					<th><?php esc_html_e( 'Date', 'team-email-reminder' ); ?></th>
+					<th><?php esc_html_e( 'Team', 'team-email-reminder' ); ?></th>
 					<?php if ( $split ) : ?>
-						<th><?php esc_html_e( 'Date', 'bar-email-reminder' ); ?></th>
-						<th><?php esc_html_e( 'Team', 'bar-email-reminder' ); ?></th>
+						<th><?php esc_html_e( 'Date', 'team-email-reminder' ); ?></th>
+						<th><?php esc_html_e( 'Team', 'team-email-reminder' ); ?></th>
 					<?php endif; ?>
 				</tr>
 			</thead>
 			<tbody>
 			<?php if ( ! $reminders ) : ?>
-				<tr><td colspan="<?php echo $split ? '4' : '2'; ?>"><?php esc_html_e( 'No bar duties found.', 'bar-email-reminder' ); ?></td></tr>
+				<tr><td colspan="<?php echo $split ? '4' : '2'; ?>"><?php esc_html_e( 'No team duties found.', 'team-email-reminder' ); ?></td></tr>
 			<?php elseif ( $split ) : ?>
 				<?php foreach ( $columns[0] as $index => $reminder ) : ?>
 					<?php $second = isset( $columns[1][ $index ] ) ? $columns[1][ $index ] : null; ?>

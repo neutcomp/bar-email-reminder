@@ -4,9 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class BER_Reminder_Cron {
-	const HOOK = 'ber_process_reminders';
-	const LOCK = 'ber_process_reminders_lock';
+class TER_Reminder_Cron {
+	const HOOK = 'ter_process_reminders';
+	const LOCK = 'ter_process_reminders_lock';
 
 	public static function init() {
 		add_filter( 'cron_schedules', array( __CLASS__, 'add_schedule' ) );
@@ -14,19 +14,19 @@ class BER_Reminder_Cron {
 	}
 
 	public static function add_schedule( $schedules ) {
-		$schedules['ber_every_thirty_minutes'] = array(
+		$schedules['ter_every_thirty_minutes'] = array(
 			'interval' => 30 * MINUTE_IN_SECONDS,
-			'display'  => __( 'Every 30 minutes', 'bar-email-reminder' ),
+			'display'  => __( 'Every 30 minutes', 'team-email-reminder' ),
 		);
 
 		return $schedules;
 	}
 
 	public static function activate() {
-		BER_Reminder_Post_Type::register();
+		TER_Reminder_Post_Type::register();
 
 		if ( ! wp_next_scheduled( self::HOOK ) ) {
-			wp_schedule_event( time(), 'ber_every_thirty_minutes', self::HOOK );
+			wp_schedule_event( time(), 'ter_every_thirty_minutes', self::HOOK );
 		}
 
 		flush_rewrite_rules();
@@ -50,7 +50,7 @@ class BER_Reminder_Cron {
 			$send_date   = $today->modify( '+2 days' )->format( 'Y-m-d' );
 			$reminder_ids = get_posts(
 				array(
-					'post_type'      => BER_Reminder_Post_Type::POST_TYPE,
+					'post_type'      => TER_Reminder_Post_Type::POST_TYPE,
 					'post_status'    => 'any',
 					'posts_per_page' => -1,
 					'fields'         => 'ids',
@@ -58,14 +58,14 @@ class BER_Reminder_Cron {
 			);
 
 			foreach ( $reminder_ids as $reminder_id ) {
-				$reminder = BER_Reminder_Post_Type::get( $reminder_id );
+				$reminder = TER_Reminder_Post_Type::get( $reminder_id );
 
-				if ( 'not-sent' !== $reminder['status'] || ! self::is_valid_date( $reminder['date'] ) || ! BER_Reminder_Mailer::get_recipients( $reminder ) ) {
+				if ( 'not-sent' !== $reminder['status'] || ! self::is_valid_date( $reminder['date'] ) || ! TER_Reminder_Mailer::get_recipients( $reminder ) ) {
 					continue;
 				}
 
 				if ( $reminder['date'] < $send_date ) {
-					update_post_meta( $reminder_id, BER_Reminder_Post_Type::STATUS_META, 'missed' );
+					update_post_meta( $reminder_id, TER_Reminder_Post_Type::STATUS_META, 'missed' );
 					continue;
 				}
 
@@ -73,8 +73,8 @@ class BER_Reminder_Cron {
 					continue;
 				}
 
-				if ( BER_Reminder_Mailer::send( $reminder ) ) {
-					update_post_meta( $reminder_id, BER_Reminder_Post_Type::STATUS_META, 'sent' );
+				if ( TER_Reminder_Mailer::send( $reminder ) ) {
+					update_post_meta( $reminder_id, TER_Reminder_Post_Type::STATUS_META, 'sent' );
 				}
 			}
 		} finally {
