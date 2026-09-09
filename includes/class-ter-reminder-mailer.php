@@ -9,9 +9,10 @@ class TER_Reminder_Mailer {
 
 	public static function get_settings() {
 		$defaults = array(
-			'from_email' => get_option( 'admin_email' ),
-			'subject'    => __( 'Team reminder for {name}', 'team-email-reminder' ),
-			'message'    => __( "Hello {name},\n\nThis is your reminder for team duty at The Victory.\n\nTeam: {team}\nTeam duty date: {date}\n\nKind regards,\nThe Victory", 'team-email-reminder' ),
+			'reminder_days' => 2,
+			'from_email'    => get_option( 'admin_email' ),
+			'subject'       => __( 'Team reminder for {name}', 'team-email-reminder' ),
+			'message'       => __( "Hello {name},\n\nThis is your reminder for team duty at The Victory.\n\nTeam: {team}\nTeam duty date: {date}\n\nKind regards,\nThe Victory", 'team-email-reminder' ),
 		);
 
 		return wp_parse_args( get_option( self::SETTINGS_OPTION, array() ), $defaults );

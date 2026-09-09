@@ -316,6 +316,10 @@ class TER_Reminder_Admin {
 				<?php wp_nonce_field( 'ter_save_settings' ); ?>
 				<table class="form-table" role="presentation">
 					<tr>
+						<th><label for="ter-reminder-days"><?php esc_html_e( 'Days before reminder', 'team-email-reminder' ); ?></label></th>
+						<td><input required type="number" min="0" step="1" class="small-text" id="ter-reminder-days" name="reminder_days" value="<?php echo esc_attr( $settings['reminder_days'] ); ?>"><p class="description"><?php esc_html_e( 'Number of calendar days before the reminder date when the email should be sent.', 'team-email-reminder' ); ?></p></td>
+					</tr>
+					<tr>
 						<th><label for="ter-from-email"><?php esc_html_e( 'Sender email address', 'team-email-reminder' ); ?></label></th>
 						<td><input required type="email" class="regular-text" id="ter-from-email" name="from_email" value="<?php echo esc_attr( $settings['from_email'] ); ?>"></td>
 					</tr>
@@ -355,17 +359,20 @@ class TER_Reminder_Admin {
 		$from_email = isset( $_POST['from_email'] ) ? sanitize_email( wp_unslash( $_POST['from_email'] ) ) : '';
 		$subject    = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '';
 		$message    = isset( $_POST['message'] ) ? wp_kses_post( wp_unslash( $_POST['message'] ) ) : '';
+		$reminder_days_input = isset( $_POST['reminder_days'] ) && is_scalar( $_POST['reminder_days'] ) ? trim( wp_unslash( $_POST['reminder_days'] ) ) : '2';
+		$reminder_days       = absint( $reminder_days_input );
 
-		if ( ! is_email( $from_email ) || ! $subject || ! $message ) {
+		if ( ! is_email( $from_email ) || ! $subject || ! $message || ! preg_match( '/^\d+$/', $reminder_days_input ) ) {
 			self::settings_redirect( 'error' );
 		}
 
 		update_option(
 			TER_Reminder_Mailer::SETTINGS_OPTION,
 			array(
-				'from_email' => $from_email,
-				'subject'    => $subject,
-				'message'    => $message,
+				'from_email'    => $from_email,
+				'subject'       => $subject,
+				'message'       => $message,
+				'reminder_days' => $reminder_days,
 			)
 		);
 

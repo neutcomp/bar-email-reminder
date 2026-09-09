@@ -8,14 +8,14 @@ Team Email Reminder is a small WordPress plugin for managing dated email reminde
 - Supports selecting and deleting multiple reminders at once.
 - Reminder fields: Name, Team, and Date.
 - Teams have a Name and Email field. Multiple team email addresses can be separated with semicolons.
-- Sends a fixed email template exactly two calendar days before Date.
+- Sends an email a configurable number of calendar days before Date.
 - Uses the WordPress site's configured timezone.
 - Checks reminders every 30 minutes through WP-Cron.
 - Keeps failed deliveries as `not-sent` so they can be retried.
 - Changes successful deliveries to `sent`.
 - Changes reminders whose send window has passed to `missed`.
 - Includes an administrator button to run the reminder check immediately.
-- Includes an Email Settings page where administrators can change the From address, subject, and message.
+- Includes an Email Settings page where administrators can change the From address, subject, message, and notification delay.
 - The email message uses the WordPress HTML editor and supports safe formatting such as bold text.
 - Provides a `[schedule]` shortcode for displaying a public table with the date and name of each reminder.
 - Supports English and Dutch based on the WordPress site language.
@@ -51,9 +51,9 @@ The plugin registers a WP-Cron event with a 30-minute interval. WP-Cron runs whe
 
 On each run, the plugin compares the reminder Date with the current date in the WordPress timezone:
 
-- Date is exactly two days ahead: attempt delivery.
-- Date is earlier than two days ahead: mark `missed` without sending late.
-- Date is more than two days ahead: leave as `not-sent`.
+- Date is exactly the configured number of days ahead: attempt delivery.
+- Date is earlier than the configured number of days ahead: mark `missed` without sending late.
+- Date is more than the configured number of days ahead: leave as `not-sent`.
 - `wp_mail()` returns `false`: leave as `not-sent` for the next check.
 
 ## Development checks

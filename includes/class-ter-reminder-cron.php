@@ -47,7 +47,8 @@ class TER_Reminder_Cron {
 
 		try {
 			$today       = new DateTimeImmutable( 'now', wp_timezone() );
-			$send_date   = $today->modify( '+2 days' )->format( 'Y-m-d' );
+			$settings    = TER_Reminder_Mailer::get_settings();
+			$send_date   = $today->modify( '+' . absint( $settings['reminder_days'] ) . ' days' )->format( 'Y-m-d' );
 			$reminder_ids = get_posts(
 				array(
 					'post_type'      => TER_Reminder_Post_Type::POST_TYPE,

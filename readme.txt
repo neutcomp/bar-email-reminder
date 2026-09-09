@@ -8,7 +8,7 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Manage dated reminders for teams and send notification emails two days before each reminder date.
+Manage dated reminders for teams and send notification emails a configurable number of days before each reminder date.
 
 == Description ==
 
@@ -19,12 +19,12 @@ Features include:
 * Create, edit, and delete reminders.
 * Assign each reminder to a team.
 * Store one or more email addresses for each team.
-* Send notifications exactly two calendar days before a reminder date.
+* Send notifications a configurable number of calendar days before a reminder date.
 * Process reminders automatically with WordPress Cron every 30 minutes.
 * Run the reminder check manually from the WordPress administration area.
 * Track reminders as not sent, sent, or missed.
 * Delete multiple reminders at once.
-* Customize the sender address, subject, and email message.
+* Customize the sender address, subject, email message, and notification delay.
 * Use the `[schedule]` shortcode to display reminders in a public table.
 * Display one or two date and team columns with the `split="true"` attribute.
 * Display numeric dates with the `dateFormat="short"` attribute.
@@ -45,7 +45,7 @@ The plugin uses the site's configured timezone for date validation, display, and
 3. Open **Reminders** in the WordPress administration menu.
 4. Open **Teams** and add at least one team with one or more valid email addresses.
 5. Create a reminder and assign it to a team.
-6. Optionally open **Email settings** to customize the sender, subject, and message.
+6. Optionally open **Email settings** to customize the sender, subject, message, and notification delay.
 7. Add `[schedule]` to a post or page to display the reminders publicly.
 
 For reliable email delivery, configure WordPress with a suitable SMTP or transactional email provider.
@@ -54,7 +54,7 @@ For reliable email delivery, configure WordPress with a suitable SMTP or transac
 
 = When is an email sent? =
 
-The plugin attempts to send an email exactly two calendar days before the reminder date, using the WordPress site's timezone.
+The plugin attempts to send an email the configured number of calendar days before the reminder date, using the WordPress site's timezone. Configure this under **Reminders > Email settings**.
 
 = Why was a reminder marked as missed? =
 
