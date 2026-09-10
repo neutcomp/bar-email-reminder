@@ -388,7 +388,13 @@ class TER_Reminder_Admin {
 	private static function redirect( $reminder_id, $message ) {
 		$url = admin_url( 'admin.php?page=' . self::PAGE . '&message=' . rawurlencode( $message ) );
 		if ( $reminder_id ) {
-			$url .= '&edit=' . absint( $reminder_id );
+			$url = add_query_arg(
+				array(
+					'edit'     => absint( $reminder_id ),
+					'_wpnonce' => wp_create_nonce( 'ter_edit_reminder' ),
+				),
+				$url
+			);
 		}
 		wp_safe_redirect( $url );
 		exit;
@@ -402,7 +408,13 @@ class TER_Reminder_Admin {
 	private static function team_redirect( $team_id, $message ) {
 		$url = admin_url( 'admin.php?page=' . self::TEAMS_PAGE . '&message=' . rawurlencode( $message ) );
 		if ( $team_id ) {
-			$url .= '&edit=' . absint( $team_id );
+			$url = add_query_arg(
+				array(
+					'edit'     => absint( $team_id ),
+					'_wpnonce' => wp_create_nonce( 'ter_edit_team' ),
+				),
+				$url
+			);
 		}
 		wp_safe_redirect( $url );
 		exit;
