@@ -100,7 +100,7 @@ class TER_Reminder_Admin {
 				<?php submit_button( $editing['id'] ? __( 'Update reminder', 'team-email-reminder' ) : __( 'Add reminder', 'team-email-reminder' ) ); ?>
 			</form>
 			<hr>
-			<h2><?php esc_html_e( 'Overview', 'team-email-reminder' ); ?></h2>
+			<h2><?php echo esc_html( sprintf( __( 'Overview (%d)', 'team-email-reminder' ), count( $reminder_ids ) ) ); ?></h2>
 			<style>
 				.ter-status-not-sent { color: #b32d2e; font-weight: 600; }
 				.ter-status-sent { color: #008a20; font-weight: 600; }

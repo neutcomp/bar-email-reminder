@@ -58,6 +58,9 @@ msgstr "Herinnering bijwerken"
 msgid "Overview"
 msgstr "Overzicht"
 
+msgid "Overview (%d)"
+msgstr "Overzicht (%d)"
+
 msgid "Select all"
 msgstr "Alles selecteren"
 
