@@ -198,7 +198,7 @@ class TER_Reminder_Admin {
 				<?php submit_button( $editing['id'] ? __( 'Update team', 'team-email-reminder' ) : __( 'Add team', 'team-email-reminder' ) ); ?>
 			</form>
 			<hr>
-			<h2><?php esc_html_e( 'Overview', 'team-email-reminder' ); ?></h2>
+			<h2><?php echo esc_html( sprintf( __( 'Overview (%d)', 'team-email-reminder' ), count( $teams ) ) ); ?></h2>
 			<table class="widefat fixed striped">
 				<thead><tr><th><?php esc_html_e( 'Name', 'team-email-reminder' ); ?></th><th><?php esc_html_e( 'Email address', 'team-email-reminder' ); ?></th><th><?php esc_html_e( 'Actions', 'team-email-reminder' ); ?></th></tr></thead>
 				<tbody>
