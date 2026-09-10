@@ -191,6 +191,9 @@ class TER_Reminder_Admin {
 				<input type="hidden" name="action" value="ter_save_team">
 				<input type="hidden" name="team_id" value="<?php echo esc_attr( $editing['id'] ); ?>">
 				<?php wp_nonce_field( 'ter_save_team' ); ?>
+				<style>
+					#ter-team-name { box-sizing: border-box; height: 44px !important; min-height: 44px !important; }
+				</style>
 				<table class="form-table" role="presentation">
 					<tr><th><label for="ter-team-name"><?php esc_html_e( 'Name', 'team-email-reminder' ); ?></label></th><td><input required class="regular-text" id="ter-team-name" name="name" value="<?php echo esc_attr( $editing['name'] ); ?>"></td></tr>
 					<tr><th><label for="ter-team-email"><?php esc_html_e( 'Email address', 'team-email-reminder' ); ?></label></th><td><input required type="text" class="regular-text" id="ter-team-email" name="email" value="<?php echo esc_attr( $editing['email'] ); ?>"><p class="description"><?php esc_html_e( 'Separate multiple email addresses with semicolons.', 'team-email-reminder' ); ?></p></td></tr>
