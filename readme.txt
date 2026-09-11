@@ -1,4 +1,4 @@
-=== Team Email Reminder ===
+=== Team Reminder for Clubs ===
 Contributors: neutcomp
 Tags: reminders, email, scheduling, wp-cron, teams
 Requires at least: 5.8
@@ -12,7 +12,7 @@ Manage dated reminders for teams and send notification emails a configurable num
 
 == Description ==
 
-Team Email Reminder helps administrators and editors manage dated team reminders and automatically notify the selected team by email.
+Team Reminder for Clubs helps administrators and editors manage dated team reminders and automatically notify the selected team by email.
 
 Features include:
 
@@ -41,9 +41,9 @@ The plugin uses the site's configured timezone for date validation, display, and
 
 == Installation ==
 
-1. Upload the `team-email-reminder` directory to the `/wp-content/plugins/` directory, or install the plugin through the WordPress Plugins screen.
+1. Upload the `team-reminder-for-clubs` directory to the `/wp-content/plugins/` directory, or install the plugin through the WordPress Plugins screen.
 2. Activate the plugin through the Plugins screen in WordPress.
-3. Open **Settings > Team Email Reminder** to manage email settings and CSV import/export.
+3. Open **Settings > Team Reminder for Clubs** to manage email settings and CSV import/export.
 4. Open **Reminders** and **Teams** to manage reminders and add at least one team with one or more valid email addresses.
 5. Create a reminder and assign it to a team.
 6. Optionally open the Email settings tab to customize the sender, subject, message, and notification delay.
@@ -53,7 +53,7 @@ For reliable email delivery, configure WordPress with a suitable SMTP or transac
 
 == Import / Export ==
 
-The plugin includes a CSV import/export feature under **Settings > Team Email Reminder > Import / Export**.
+The plugin includes a CSV import/export feature under **Settings > Team Reminder for Clubs > Import / Export**.
 
 * Export creates a file named `club-team-emailreminder-[dd-mm-yyyy].csv`.
 * The export includes both teams and reminders.
@@ -81,7 +81,7 @@ Yes. Separate multiple email addresses with semicolons in the team email field.
 
 = How do I change the email content? =
 
-Open **Settings > Team Email Reminder > Email settings** in the WordPress administration area. You can change the sender address, subject, and message. The message supports `{name}`, `{team}`, and `{date}` placeholders.
+Open **Settings > Team Reminder for Clubs > Email settings** in the WordPress administration area. You can change the sender address, subject, and message. The message supports `{name}`, `{team}`, and `{date}` placeholders.
 
 = How do I display reminders on a page? =
 
@@ -93,27 +93,27 @@ English and Dutch are included. The plugin follows the language configured for t
 
 == Screenshots ==
 
-![Reminder menu](https://ps.w.org/team-email-reminder/assets/reminder-menu.png)
+![Reminder menu](https://ps.w.org/team-reminder-for-clubs/assets/reminder-menu.png)
 
-The WordPress administration menu for Team Email Reminder.
+The WordPress administration menu for Team Reminder for Clubs.
 
-![Reminder list](https://ps.w.org/team-email-reminder/assets/reminder-list.png)
+![Reminder list](https://ps.w.org/team-reminder-for-clubs/assets/reminder-list.png)
 
 The reminder overview with reminder status and actions.
 
-![Add reminder](https://ps.w.org/team-email-reminder/assets/reminder-add.png)
+![Add reminder](https://ps.w.org/team-reminder-for-clubs/assets/reminder-add.png)
 
 The form for adding or editing a reminder.
 
-![Teams overview](https://ps.w.org/team-email-reminder/assets/teams-overview.png)
+![Teams overview](https://ps.w.org/team-reminder-for-clubs/assets/teams-overview.png)
 
 The teams overview.
 
-![Add team](https://ps.w.org/team-email-reminder/assets/teams-add.png)
+![Add team](https://ps.w.org/team-reminder-for-clubs/assets/teams-add.png)
 
 The form for adding or editing a team.
 
-![Email settings](https://ps.w.org/team-email-reminder/assets/email-settings.png)
+![Email settings](https://ps.w.org/team-reminder-for-clubs/assets/email-settings.png)
 
 The email settings screen.
 

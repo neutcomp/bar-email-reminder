@@ -25,8 +25,8 @@ class NEUTCOMP_TER_Reminder_Admin {
 
 	public static function menu() {
 		add_menu_page(
-			__( 'Team email reminders', 'team-email-reminder' ),
-			__( 'Reminders', 'team-email-reminder' ),
+			__( 'Team reminders for clubs', 'team-reminder-for-clubs' ),
+			__( 'Reminders', 'team-reminder-for-clubs' ),
 			self::CAPABILITY,
 			self::PAGE,
 			array( __CLASS__, 'render' ),
@@ -35,15 +35,15 @@ class NEUTCOMP_TER_Reminder_Admin {
 		);
 		add_submenu_page(
 			self::PAGE,
-			__( 'Teams', 'team-email-reminder' ),
-			__( 'Teams', 'team-email-reminder' ),
+			__( 'Teams', 'team-reminder-for-clubs' ),
+			__( 'Teams', 'team-reminder-for-clubs' ),
 			self::CAPABILITY,
 			self::TEAMS_PAGE,
 			array( __CLASS__, 'render_teams' )
 		);
 		add_options_page(
-			__( 'Team Email Reminder', 'team-email-reminder' ),
-			__( 'Team Email Reminder', 'team-email-reminder' ),
+			__( 'Team Reminder for Clubs', 'team-reminder-for-clubs' ),
+			__( 'Team Reminder for Clubs', 'team-reminder-for-clubs' ),
 			self::CAPABILITY,
 			self::SETTINGS_PAGE,
 			array( __CLASS__, 'render_settings' )
@@ -52,7 +52,7 @@ class NEUTCOMP_TER_Reminder_Admin {
 
 	public static function render() {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'You do not have permission to manage reminders.', 'team-email-reminder' ) );
+			wp_die( esc_html__( 'You do not have permission to manage reminders.', 'team-reminder-for-clubs' ) );
 		}
 
 		$edit_id = 0;
@@ -81,16 +81,16 @@ class NEUTCOMP_TER_Reminder_Admin {
 		);
 		?>
 <div class="wrap">
-	<h1><?php esc_html_e( 'Team email reminders', 'team-email-reminder' ); ?></h1>
+	<h1><?php esc_html_e( 'Team reminders for clubs', 'team-reminder-for-clubs' ); ?></h1>
 	<?php self::notice(); ?>
 	<p>
 		<a class="button"
 			href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ter_run_cron' ), 'ter_run_cron' ) ); ?>">
-			<?php esc_html_e( 'Check reminders now', 'team-email-reminder' ); ?>
+			<?php esc_html_e( 'Check reminders now', 'team-reminder-for-clubs' ); ?>
 		</a>
 	</p>
 	<h2>
-		<?php echo $editing['id'] ? esc_html__( 'Edit reminder', 'team-email-reminder' ) : esc_html__( 'Add reminder', 'team-email-reminder' ); ?>
+		<?php echo $editing['id'] ? esc_html__( 'Edit reminder', 'team-reminder-for-clubs' ) : esc_html__( 'Add reminder', 'team-reminder-for-clubs' ); ?>
 	</h2>
 	<form class="ter-reminder-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 		<input type="hidden" name="action" value="ter_save_reminder">
@@ -98,30 +98,30 @@ class NEUTCOMP_TER_Reminder_Admin {
 		<?php wp_nonce_field( 'ter_save_reminder' ); ?>
 		<table class="form-table" role="presentation">
 			<tr>
-				<th><label for="ter-name"><?php esc_html_e( 'Name', 'team-email-reminder' ); ?></label></th>
+				<th><label for="ter-name"><?php esc_html_e( 'Name', 'team-reminder-for-clubs' ); ?></label></th>
 				<td><input required class="regular-text" id="ter-name" name="name"
 						value="<?php echo esc_attr( $editing['name'] ); ?>"></td>
 			</tr>
 			<tr>
-				<th><label for="ter-team"><?php esc_html_e( 'Team', 'team-email-reminder' ); ?></label></th>
+				<th><label for="ter-team"><?php esc_html_e( 'Team', 'team-reminder-for-clubs' ); ?></label></th>
 				<td><select required class="regular-text" id="ter-team" name="team_id">
-						<option value=""><?php esc_html_e( 'Select a team', 'team-email-reminder' ); ?></option>
+						<option value=""><?php esc_html_e( 'Select a team', 'team-reminder-for-clubs' ); ?></option>
 						<?php foreach ( $teams as $team ) : ?><option value="<?php echo esc_attr( $team['id'] ); ?>"
 							<?php selected( $editing['team_id'], $team['id'] ); ?>><?php echo esc_html( $team['name'] ); ?></option>
 						<?php endforeach; ?>
 					</select><?php if ( ! $teams ) : ?><p class="description">
-						<?php esc_html_e( 'Create a team first.', 'team-email-reminder' ); ?></p><?php endif; ?></td>
+						<?php esc_html_e( 'Create a team first.', 'team-reminder-for-clubs' ); ?></p><?php endif; ?></td>
 			</tr>
 			<tr>
-				<th><label for="ter-date"><?php esc_html_e( 'Date', 'team-email-reminder' ); ?></label></th>
+				<th><label for="ter-date"><?php esc_html_e( 'Date', 'team-reminder-for-clubs' ); ?></label></th>
 				<td><input required type="date" id="ter-date" name="date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>"
 						value="<?php echo esc_attr( $editing['date'] ); ?>"></td>
 			</tr>
 		</table>
-		<?php submit_button( $editing['id'] ? __( 'Update reminder', 'team-email-reminder' ) : __( 'Add reminder', 'team-email-reminder' ) ); ?>
+		<?php submit_button( $editing['id'] ? __( 'Update reminder', 'team-reminder-for-clubs' ) : __( 'Add reminder', 'team-reminder-for-clubs' ) ); ?>
 	</form>
 	<hr>
-	<h2><?php echo esc_html( sprintf( __( 'Overview (%d)', 'team-email-reminder' ), count( $reminder_ids ) ) ); ?></h2>
+	<h2><?php echo esc_html( sprintf( __( 'Overview (%d)', 'team-reminder-for-clubs' ), count( $reminder_ids ) ) ); ?></h2>
 	<style>
 	.ter-status-not-sent {
 		color: #b32d2e;
@@ -165,25 +165,25 @@ class NEUTCOMP_TER_Reminder_Admin {
 			<thead>
 				<tr>
 					<th class="check-column"><input type="checkbox"
-							aria-label="<?php esc_attr_e( 'Select all', 'team-email-reminder' ); ?>"></th>
-					<th><?php esc_html_e( 'Name', 'team-email-reminder' ); ?></th>
-					<th><?php esc_html_e( 'Team', 'team-email-reminder' ); ?></th>
-					<th><?php esc_html_e( 'Date', 'team-email-reminder' ); ?></th>
-					<th><?php esc_html_e( 'Status', 'team-email-reminder' ); ?></th>
-					<th><?php esc_html_e( 'Actions', 'team-email-reminder' ); ?></th>
+							aria-label="<?php esc_attr_e( 'Select all', 'team-reminder-for-clubs' ); ?>"></th>
+					<th><?php esc_html_e( 'Name', 'team-reminder-for-clubs' ); ?></th>
+					<th><?php esc_html_e( 'Team', 'team-reminder-for-clubs' ); ?></th>
+					<th><?php esc_html_e( 'Date', 'team-reminder-for-clubs' ); ?></th>
+					<th><?php esc_html_e( 'Status', 'team-reminder-for-clubs' ); ?></th>
+					<th><?php esc_html_e( 'Actions', 'team-reminder-for-clubs' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php if ( ! $reminder_ids ) : ?>
 				<tr>
-					<td colspan="6"><?php esc_html_e( 'No reminders found.', 'team-email-reminder' ); ?></td>
+					<td colspan="6"><?php esc_html_e( 'No reminders found.', 'team-reminder-for-clubs' ); ?></td>
 				</tr>
 				<?php else : foreach ( $reminder_ids as $reminder_id ) : $reminder = NEUTCOMP_TER_Reminder_Post_Type::get( $reminder_id ); ?>
 				<tr>
 					<td class="check-column">
 						<?php
 							/* translators: %s: reminder name. */
-							$select_label = sprintf( __( 'Select %s', 'team-email-reminder' ), $reminder['name'] );
+							$select_label = sprintf( __( 'Select %s', 'team-reminder-for-clubs' ), $reminder['name'] );
 							?>
 						<input type="checkbox" name="reminder_ids[]" value="<?php echo esc_attr( $reminder_id ); ?>"
 							aria-label="<?php echo esc_attr( $select_label ); ?>">
@@ -195,17 +195,17 @@ class NEUTCOMP_TER_Reminder_Admin {
 							class="ter-status-<?php echo esc_attr( $reminder['status'] ); ?>"><?php echo esc_html( self::get_status_label( $reminder['status'] ) ); ?></span>
 					</td>
 					<td><a
-							href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=' . self::PAGE . '&edit=' . $reminder_id ), 'ter_edit_reminder' ) ); ?>"><?php esc_html_e( 'Edit', 'team-email-reminder' ); ?></a>
+							href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=' . self::PAGE . '&edit=' . $reminder_id ), 'ter_edit_reminder' ) ); ?>"><?php esc_html_e( 'Edit', 'team-reminder-for-clubs' ); ?></a>
 						| <a
 							href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ter_delete_reminder&reminder_id=' . $reminder_id ), 'ter_delete_reminder_' . $reminder_id ) ); ?>"
-							onclick="return confirm('<?php echo esc_js( __( 'Delete this reminder?', 'team-email-reminder' ) ); ?>');"><?php esc_html_e( 'Delete', 'team-email-reminder' ); ?></a>
+							onclick="return confirm('<?php echo esc_js( __( 'Delete this reminder?', 'team-reminder-for-clubs' ) ); ?>');"><?php esc_html_e( 'Delete', 'team-reminder-for-clubs' ); ?></a>
 					</td>
 				</tr>
 				<?php endforeach; endif; ?>
 			</tbody>
 		</table>
 		<div class="ter-bulk-delete-submit">
-			<?php submit_button( __( 'Delete selected reminders', 'team-email-reminder' ), 'delete', 'submit', false, array( 'onclick' => "return confirm('" . esc_js( __( 'Delete the selected reminders?', 'team-email-reminder' ) ) . "');" ) ); ?>
+			<?php submit_button( __( 'Delete selected reminders', 'team-reminder-for-clubs' ), 'delete', 'submit', false, array( 'onclick' => "return confirm('" . esc_js( __( 'Delete the selected reminders?', 'team-reminder-for-clubs' ) ) . "');" ) ); ?>
 		</div>
 	</form>
 </div>
@@ -255,10 +255,10 @@ class NEUTCOMP_TER_Reminder_Admin {
 		$teams   = NEUTCOMP_TER_Team_Post_Type::get_all();
 		?>
 <div class="wrap">
-	<h1><?php esc_html_e( 'Teams', 'team-email-reminder' ); ?></h1>
+	<h1><?php esc_html_e( 'Teams', 'team-reminder-for-clubs' ); ?></h1>
 	<?php self::notice(); ?>
 	<h2>
-		<?php echo $editing['id'] ? esc_html__( 'Edit team', 'team-email-reminder' ) : esc_html__( 'Add team', 'team-email-reminder' ); ?>
+		<?php echo $editing['id'] ? esc_html__( 'Edit team', 'team-reminder-for-clubs' ) : esc_html__( 'Add team', 'team-reminder-for-clubs' ); ?>
 	</h2>
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 		<input type="hidden" name="action" value="ter_save_team">
@@ -273,45 +273,45 @@ class NEUTCOMP_TER_Reminder_Admin {
 		</style>
 		<table class="form-table" role="presentation">
 			<tr>
-				<th><label for="ter-team-name"><?php esc_html_e( 'Name', 'team-email-reminder' ); ?></label></th>
+				<th><label for="ter-team-name"><?php esc_html_e( 'Name', 'team-reminder-for-clubs' ); ?></label></th>
 				<td><input required class="regular-text" id="ter-team-name" name="name"
 						value="<?php echo esc_attr( $editing['name'] ); ?>"></td>
 			</tr>
 			<tr>
-				<th><label for="ter-team-email"><?php esc_html_e( 'Email address', 'team-email-reminder' ); ?></label></th>
+				<th><label for="ter-team-email"><?php esc_html_e( 'Email address', 'team-reminder-for-clubs' ); ?></label></th>
 				<td><input required type="text" class="regular-text" id="ter-team-email" name="email"
 						value="<?php echo esc_attr( $editing['email'] ); ?>">
 					<p class="description">
-						<?php esc_html_e( 'Separate multiple email addresses with semicolons.', 'team-email-reminder' ); ?></p>
+						<?php esc_html_e( 'Separate multiple email addresses with semicolons.', 'team-reminder-for-clubs' ); ?></p>
 				</td>
 			</tr>
 		</table>
-		<?php submit_button( $editing['id'] ? __( 'Update team', 'team-email-reminder' ) : __( 'Add team', 'team-email-reminder' ) ); ?>
+		<?php submit_button( $editing['id'] ? __( 'Update team', 'team-reminder-for-clubs' ) : __( 'Add team', 'team-reminder-for-clubs' ) ); ?>
 	</form>
 	<hr>
-	<h2><?php echo esc_html( sprintf( __( 'Overview (%d)', 'team-email-reminder' ), count( $teams ) ) ); ?></h2>
+	<h2><?php echo esc_html( sprintf( __( 'Overview (%d)', 'team-reminder-for-clubs' ), count( $teams ) ) ); ?></h2>
 	<table class="widefat fixed striped">
 		<thead>
 			<tr>
-				<th><?php esc_html_e( 'Name', 'team-email-reminder' ); ?></th>
-				<th><?php esc_html_e( 'Email address', 'team-email-reminder' ); ?></th>
-				<th><?php esc_html_e( 'Actions', 'team-email-reminder' ); ?></th>
+				<th><?php esc_html_e( 'Name', 'team-reminder-for-clubs' ); ?></th>
+				<th><?php esc_html_e( 'Email address', 'team-reminder-for-clubs' ); ?></th>
+				<th><?php esc_html_e( 'Actions', 'team-reminder-for-clubs' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php if ( ! $teams ) : ?>
 			<tr>
-				<td colspan="3"><?php esc_html_e( 'No teams found.', 'team-email-reminder' ); ?></td>
+				<td colspan="3"><?php esc_html_e( 'No teams found.', 'team-reminder-for-clubs' ); ?></td>
 			</tr>
 			<?php else : foreach ( $teams as $team ) : ?>
 			<tr>
 				<td><?php echo esc_html( $team['name'] ); ?></td>
 				<td><?php echo esc_html( $team['email'] ); ?></td>
 				<td><a
-						href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=' . self::TEAMS_PAGE . '&edit=' . $team['id'] ), 'ter_edit_team' ) ); ?>"><?php esc_html_e( 'Edit', 'team-email-reminder' ); ?></a>
+						href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=' . self::TEAMS_PAGE . '&edit=' . $team['id'] ), 'ter_edit_team' ) ); ?>"><?php esc_html_e( 'Edit', 'team-reminder-for-clubs' ); ?></a>
 					| <a
 						href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ter_delete_team&team_id=' . $team['id'] ), 'ter_delete_team_' . $team['id'] ) ); ?>"
-						onclick="return confirm('<?php echo esc_js( __( 'Delete this team?', 'team-email-reminder' ) ); ?>');"><?php esc_html_e( 'Delete', 'team-email-reminder' ); ?></a>
+						onclick="return confirm('<?php echo esc_js( __( 'Delete this team?', 'team-reminder-for-clubs' ) ); ?>');"><?php esc_html_e( 'Delete', 'team-reminder-for-clubs' ); ?></a>
 				</td>
 			</tr>
 			<?php endforeach; endif; ?>
@@ -418,44 +418,46 @@ class NEUTCOMP_TER_Reminder_Admin {
 		$settings = NEUTCOMP_TER_Reminder_Mailer::get_settings();
 		?>
 <div class="wrap">
-	<h1><?php esc_html_e( 'Team Email Reminder', 'team-email-reminder' ); ?></h1>
+	<h1><?php esc_html_e( 'Team Reminder for Clubs', 'team-reminder-for-clubs' ); ?></h1>
 	<?php self::notice(); ?>
 	<h2 class="nav-tab-wrapper">
-		<a href="<?php echo esc_url( admin_url( 'options-general.php?page=' . self::SETTINGS_PAGE . '&tab=settings' ) ); ?>" class="nav-tab <?php echo 'settings' === $tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Email settings', 'team-email-reminder' ); ?></a>
-		<a href="<?php echo esc_url( admin_url( 'options-general.php?page=' . self::SETTINGS_PAGE . '&tab=import-export' ) ); ?>" class="nav-tab <?php echo 'import-export' === $tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Import / Export', 'team-email-reminder' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'options-general.php?page=' . self::SETTINGS_PAGE . '&tab=settings' ) ); ?>"
+			class="nav-tab <?php echo 'settings' === $tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Email settings', 'team-reminder-for-clubs' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'options-general.php?page=' . self::SETTINGS_PAGE . '&tab=import-export' ) ); ?>"
+			class="nav-tab <?php echo 'import-export' === $tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Import / Export', 'team-reminder-for-clubs' ); ?></a>
 	</h2>
 	<?php if ( 'import-export' === $tab ) : ?>
-		<?php self::render_import_export_tab(); ?>
+	<?php self::render_import_export_tab(); ?>
 	<?php else : ?>
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-			<input type="hidden" name="action" value="ter_save_settings">
-			<?php wp_nonce_field( 'ter_save_settings' ); ?>
-			<table class="form-table" role="presentation">
-				<tr>
-					<th><label for="ter-reminder-days"><?php esc_html_e( 'Days before reminder', 'team-email-reminder' ); ?></label>
-					</th>
-					<td><input required type="number" min="0" step="1" class="small-text" id="ter-reminder-days"
-							name="reminder_days" value="<?php echo esc_attr( $settings['reminder_days'] ); ?>">
-						<p class="description">
-							<?php esc_html_e( 'Number of calendar days before the reminder date when the email should be sent.', 'team-email-reminder' ); ?>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th><label for="ter-from-email"><?php esc_html_e( 'Sender email address', 'team-email-reminder' ); ?></label>
-					</th>
-					<td><input required type="email" class="regular-text" id="ter-from-email" name="from_email"
-							value="<?php echo esc_attr( $settings['from_email'] ); ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="ter-email-subject"><?php esc_html_e( 'Email subject', 'team-email-reminder' ); ?></label></th>
-					<td><input required class="large-text" id="ter-email-subject" name="subject"
-							value="<?php echo esc_attr( $settings['subject'] ); ?>"></td>
-				</tr>
-				<tr>
-					<th><label for="ter-email-message"><?php esc_html_e( 'Email message', 'team-email-reminder' ); ?></label></th>
-					<td>
-						<?php
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<input type="hidden" name="action" value="ter_save_settings">
+		<?php wp_nonce_field( 'ter_save_settings' ); ?>
+		<table class="form-table" role="presentation">
+			<tr>
+				<th><label for="ter-reminder-days"><?php esc_html_e( 'Days before reminder', 'team-reminder-for-clubs' ); ?></label>
+				</th>
+				<td><input required type="number" min="0" step="1" class="small-text" id="ter-reminder-days"
+						name="reminder_days" value="<?php echo esc_attr( $settings['reminder_days'] ); ?>">
+					<p class="description">
+						<?php esc_html_e( 'Number of calendar days before the reminder date when the email should be sent.', 'team-reminder-for-clubs' ); ?>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<th><label for="ter-from-email"><?php esc_html_e( 'Sender email address', 'team-reminder-for-clubs' ); ?></label>
+				</th>
+				<td><input required type="email" class="regular-text" id="ter-from-email" name="from_email"
+						value="<?php echo esc_attr( $settings['from_email'] ); ?>"></td>
+			</tr>
+			<tr>
+				<th><label for="ter-email-subject"><?php esc_html_e( 'Email subject', 'team-reminder-for-clubs' ); ?></label></th>
+				<td><input required class="large-text" id="ter-email-subject" name="subject"
+						value="<?php echo esc_attr( $settings['subject'] ); ?>"></td>
+			</tr>
+			<tr>
+				<th><label for="ter-email-message"><?php esc_html_e( 'Email message', 'team-reminder-for-clubs' ); ?></label></th>
+				<td>
+					<?php
 							wp_editor(
 								$settings['message'],
 								'ter-email-message',
@@ -467,13 +469,13 @@ class NEUTCOMP_TER_Reminder_Admin {
 								)
 							);
 						?>
-						<p class="description">
-							<?php esc_html_e( 'Available placeholders: {name}, {team}, and {date}.', 'team-email-reminder' ); ?></p>
-					</td>
-				</tr>
-			</table>
-			<?php submit_button( __( 'Save email settings', 'team-email-reminder' ) ); ?>
-		</form>
+					<p class="description">
+						<?php esc_html_e( 'Available placeholders: {name}, {team}, and {date}.', 'team-reminder-for-clubs' ); ?></p>
+				</td>
+			</tr>
+		</table>
+		<?php submit_button( __( 'Save email settings', 'team-reminder-for-clubs' ) ); ?>
+	</form>
 	<?php endif; ?>
 </div>
 <?php
@@ -481,28 +483,31 @@ class NEUTCOMP_TER_Reminder_Admin {
 
 	private static function render_import_export_tab() {
 		?>
-		<div class="card">
-			<h2><?php esc_html_e( 'Export', 'team-email-reminder' ); ?></h2>
-			<p><?php esc_html_e( 'Export all teams and reminders to a CSV file.', 'team-email-reminder' ); ?></p>
-			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-				<input type="hidden" name="action" value="ter_export_data">
-				<?php wp_nonce_field( 'ter_export_data' ); ?>
-				<?php submit_button( __( 'Export CSV', 'team-email-reminder' ), 'primary', 'submit', false ); ?>
-			</form>
-		</div>
-		<hr>
-		<div class="card">
-			<h2><?php esc_html_e( 'Import', 'team-email-reminder' ); ?></h2>
-			<p><?php esc_html_e( 'Importing a CSV file will replace all existing teams and reminders.', 'team-email-reminder' ); ?></p>
-			<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-				<input type="hidden" name="action" value="ter_import_data">
-				<?php wp_nonce_field( 'ter_import_data' ); ?>
-				<input type="file" name="import_file" accept=".csv,text/csv" required>
-				<p class="description"><?php esc_html_e( 'Expected columns: type, name, team_name, email, date, status', 'team-email-reminder' ); ?></p>
-				<?php submit_button( __( 'Import CSV', 'team-email-reminder' ), 'secondary', 'submit', false ); ?>
-			</form>
-		</div>
-		<?php
+<div class="card">
+	<h2><?php esc_html_e( 'Export', 'team-reminder-for-clubs' ); ?></h2>
+	<p><?php esc_html_e( 'Export all teams and reminders to a CSV file.', 'team-reminder-for-clubs' ); ?></p>
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<input type="hidden" name="action" value="ter_export_data">
+		<?php wp_nonce_field( 'ter_export_data' ); ?>
+		<?php submit_button( __( 'Export CSV', 'team-reminder-for-clubs' ), 'primary', 'submit', false ); ?>
+	</form>
+</div>
+<hr>
+<div class="card">
+	<h2><?php esc_html_e( 'Import', 'team-reminder-for-clubs' ); ?></h2>
+	<p>
+		<?php esc_html_e( 'Importing a CSV file will replace all existing teams and reminders.', 'team-reminder-for-clubs' ); ?>
+	</p>
+	<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<input type="hidden" name="action" value="ter_import_data">
+		<?php wp_nonce_field( 'ter_import_data' ); ?>
+		<input type="file" name="import_file" accept=".csv,text/csv" required>
+		<p class="description">
+			<?php esc_html_e( 'Expected columns: type, name, team_name, email, date, status', 'team-reminder-for-clubs' ); ?></p>
+		<?php submit_button( __( 'Import CSV', 'team-reminder-for-clubs' ), 'secondary', 'submit', false ); ?>
+	</form>
+</div>
+<?php
 	}
 
 	public static function save_settings() {
@@ -711,7 +716,7 @@ class NEUTCOMP_TER_Reminder_Admin {
 
 	private static function check_access() {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'You do not have permission to manage reminders.', 'team-email-reminder' ) );
+			wp_die( esc_html__( 'You do not have permission to manage reminders.', 'team-reminder-for-clubs' ) );
 		}
 	}
 
@@ -756,7 +761,7 @@ class NEUTCOMP_TER_Reminder_Admin {
 
 	private static function get_team_name( $team_id ) {
 		if ( ! $team_id || NEUTCOMP_TER_Team_Post_Type::POST_TYPE !== get_post_type( $team_id ) ) {
-			return __( 'Unknown team', 'team-email-reminder' );
+			return __( 'Unknown team', 'team-reminder-for-clubs' );
 		}
 
 		return NEUTCOMP_TER_Team_Post_Type::get( $team_id )['name'];
@@ -783,9 +788,9 @@ class NEUTCOMP_TER_Reminder_Admin {
 
 	private static function get_status_label( $status ) {
 		$labels = array(
-			'not-sent' => __( 'Not sent', 'team-email-reminder' ),
-			'sent'     => __( 'Sent', 'team-email-reminder' ),
-			'missed'   => __( 'Missed', 'team-email-reminder' ),
+			'not-sent' => __( 'Not sent', 'team-reminder-for-clubs' ),
+			'sent'     => __( 'Sent', 'team-reminder-for-clubs' ),
+			'missed'   => __( 'Missed', 'team-reminder-for-clubs' ),
 		);
 
 		return isset( $labels[ $status ] ) ? $labels[ $status ] : $status;
@@ -797,27 +802,27 @@ class NEUTCOMP_TER_Reminder_Admin {
 			return;
 		}
 		$messages = array(
-			'saved'          => __( 'Reminder saved.', 'team-email-reminder' ),
-			'deleted'        => __( 'Reminder deleted.', 'team-email-reminder' ),
-			'error'          => __( 'Please check the fields.', 'team-email-reminder' ),
-			'cron-run'       => __( 'Reminder check completed.', 'team-email-reminder' ),
-			'settings-saved' => __( 'Email settings saved.', 'team-email-reminder' ),
-			'team-saved'     => __( 'Team saved.', 'team-email-reminder' ),
-			'team-deleted'   => __( 'Team deleted.', 'team-email-reminder' ),
-			'team-in-use'    => __( 'This team cannot be deleted because it is still linked to a reminder.', 'team-email-reminder' ),
-			'imported'       => __( 'Teams and reminders imported successfully.', 'team-email-reminder' ),
-			'import-error'   => __( 'The import file is invalid or empty.', 'team-email-reminder' ),
+			'saved'          => __( 'Reminder saved.', 'team-reminder-for-clubs' ),
+			'deleted'        => __( 'Reminder deleted.', 'team-reminder-for-clubs' ),
+			'error'          => __( 'Please check the fields.', 'team-reminder-for-clubs' ),
+			'cron-run'       => __( 'Reminder check completed.', 'team-reminder-for-clubs' ),
+			'settings-saved' => __( 'Email settings saved.', 'team-reminder-for-clubs' ),
+			'team-saved'     => __( 'Team saved.', 'team-reminder-for-clubs' ),
+			'team-deleted'   => __( 'Team deleted.', 'team-reminder-for-clubs' ),
+			'team-in-use'    => __( 'This team cannot be deleted because it is still linked to a reminder.', 'team-reminder-for-clubs' ),
+			'imported'       => __( 'Teams and reminders imported successfully.', 'team-reminder-for-clubs' ),
+			'import-error'   => __( 'The import file is invalid or empty.', 'team-reminder-for-clubs' ),
 		);
 		$key      = sanitize_key( $message );
 		if ( 0 === strpos( $key, 'bulk-deleted-' ) ) {
 			$count = absint( substr( $key, strlen( 'bulk-deleted-' ) ) );
 			/* translators: %d: numter of reminders deleted. */
-			$deleted_message = sprintf( _n( '%d reminder deleted.', '%d reminders deleted.', $count, 'team-email-reminder' ), $count );
+			$deleted_message = sprintf( _n( '%d reminder deleted.', '%d reminders deleted.', $count, 'team-reminder-for-clubs' ), $count );
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( $deleted_message ) . '</p></div>';
 			return;
 		}
 		if ( 'nothing-selected' === $key ) {
-			echo '<div class="notice notice-warning is-dismissible"><p>' . esc_html__( 'Select at least one reminder first.', 'team-email-reminder' ) . '</p></div>';
+			echo '<div class="notice notice-warning is-dismissible"><p>' . esc_html__( 'Select at least one reminder first.', 'team-reminder-for-clubs' ) . '</p></div>';
 			return;
 		}
 		if ( isset( $messages[ $key ] ) ) {

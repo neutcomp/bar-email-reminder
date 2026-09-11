@@ -59,17 +59,17 @@ class NEUTCOMP_TER_Reminder_Shortcode {
 		<table class="ter-schedule-table<?php echo $split ? ' ter-schedule-table-split' : ''; ?>">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Date', 'team-email-reminder' ); ?></th>
-					<th><?php esc_html_e( 'Team', 'team-email-reminder' ); ?></th>
+					<th><?php esc_html_e( 'Date', 'team-reminder-for-clubs' ); ?></th>
+					<th><?php esc_html_e( 'Team', 'team-reminder-for-clubs' ); ?></th>
 					<?php if ( $split ) : ?>
-						<th><?php esc_html_e( 'Date', 'team-email-reminder' ); ?></th>
-						<th><?php esc_html_e( 'Team', 'team-email-reminder' ); ?></th>
+						<th><?php esc_html_e( 'Date', 'team-reminder-for-clubs' ); ?></th>
+						<th><?php esc_html_e( 'Team', 'team-reminder-for-clubs' ); ?></th>
 					<?php endif; ?>
 				</tr>
 			</thead>
 			<tbody>
 			<?php if ( ! $reminders ) : ?>
-				<tr><td colspan="<?php echo $split ? '4' : '2'; ?>"><?php esc_html_e( 'No team duties found.', 'team-email-reminder' ); ?></td></tr>
+				<tr><td colspan="<?php echo $split ? '4' : '2'; ?>"><?php esc_html_e( 'No team duties found.', 'team-reminder-for-clubs' ); ?></td></tr>
 			<?php elseif ( $split ) : ?>
 				<?php foreach ( $columns[0] as $index => $reminder ) : ?>
 					<?php $second = isset( $columns[1][ $index ] ) ? $columns[1][ $index ] : null; ?>

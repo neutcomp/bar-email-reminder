@@ -19,8 +19,8 @@ class NEUTCOMP_TER_Team_Post_Type {
 			self::POST_TYPE,
 			array(
 				'labels'           => array(
-					'name'          => __( 'Teams', 'team-email-reminder' ),
-					'singular_name' => __( 'Team', 'team-email-reminder' ),
+					'name'          => __( 'Teams', 'team-reminder-for-clubs' ),
+					'singular_name' => __( 'Team', 'team-reminder-for-clubs' ),
 				),
 				'public'          => false,
 				'show_ui'         => false,

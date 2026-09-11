@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Team Email Reminder
+ * Plugin Name: Team Reminder for Clubs
  * Description: Manage dated reminders and send notification emails two days before their date.
  * Version: 1.0.0
  * Requires at least: 5.8
@@ -8,7 +8,7 @@
  * license: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Author: Bjorn van der Neut
- * Text Domain: team-email-reminder
+ * Text Domain: team-reminder-for-clubs
  * Domain Path: /languages
  */
 

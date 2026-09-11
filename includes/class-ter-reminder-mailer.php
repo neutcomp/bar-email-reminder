@@ -11,8 +11,8 @@ class NEUTCOMP_TER_Reminder_Mailer {
 		$defaults = array(
 			'reminder_days' => 2,
 			'from_email'    => get_option( 'admin_email' ),
-			'subject'       => __( 'Team reminder for {name}', 'team-email-reminder' ),
-			'message'       => __( "Hello {name},\n\nThis is your reminder for team duty at The Victory.\n\nTeam: {team}\nTeam duty date: {date}\n\nKind regards,\nThe Victory", 'team-email-reminder' ),
+			'subject'       => __( 'Team reminder for {name}', 'team-reminder-for-clubs' ),
+			'message'       => __( "Hello {name},\n\nThis is your reminder for team duty at The Victory.\n\nTeam: {team}\nTeam duty date: {date}\n\nKind regards,\nThe Victory", 'team-reminder-for-clubs' ),
 		);
 
 		return wp_parse_args( get_option( self::SETTINGS_OPTION, array() ), $defaults );

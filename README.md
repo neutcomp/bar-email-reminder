@@ -1,6 +1,6 @@
-# Team Email Reminder
+# Team Reminder for Clubs
 
-Team Email Reminder is a small WordPress plugin for managing dated email reminders.
+Team Reminder for Clubs is a small WordPress plugin for managing dated email reminders.
 
 ## Features
 
@@ -15,7 +15,7 @@ Team Email Reminder is a small WordPress plugin for managing dated email reminde
 - Changes successful deliveries to `sent`.
 - Changes reminders whose send window has passed to `missed`.
 - Includes an administrator button to run the reminder check immediately.
-- Includes a global WordPress Settings page named “Team Email Reminder” for email configuration and CSV import/export.
+- Includes a global WordPress Settings page named “Team Reminder for Clubs” for email configuration and CSV import/export.
 - The email message uses the WordPress HTML editor and supports safe formatting such as bold text.
 - Provides a `[neutcomp-schedule]` shortcode for displaying a public table with the date and name of each reminder.
 - Supports CSV export of all teams and reminders, plus full replacement import from a generated file.
@@ -39,16 +39,16 @@ Use `dateFormat="short"` for numeric dates in `dd-mm-yyyy` format. Parameters ca
 
 ## Installation
 
-1. Copy this directory to `wp-content/plugins/team-email-reminder`.
-2. Activate **Team Email Reminder** from the WordPress Plugins screen.
-3. Open the plugin menus in the WordPress administration area. Use **Settings > Team Email Reminder** for email settings and CSV import/export.
+1. Copy this directory to `wp-content/plugins/team-reminder-for-clubs`.
+2. Activate **Team Reminder for Clubs** from the WordPress Plugins screen.
+3. Open the plugin menus in the WordPress administration area. Use **Settings > Team Reminder for Clubs** for email settings and CSV import/export.
 4. Open **Reminders** and **Teams** to manage reminders and create the teams that can be selected on reminders.
 
 The site's mail configuration must support `wp_mail()`. For reliable delivery, configure WordPress with a suitable SMTP or transactional mail provider.
 
 ## Import / Export
 
-The plugin includes a CSV import/export feature under **Settings > Team Email Reminder > Import / Export**.
+The plugin includes a CSV import/export feature under **Settings > Team Reminder for Clubs > Import / Export**.
 
 - Export creates a file named `club-team-emailreminder-[dd-mm-yyyy].csv`.
 - The export includes both teams and reminders.

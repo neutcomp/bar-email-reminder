@@ -22,8 +22,8 @@ class NEUTCOMP_TER_Reminder_Post_Type {
 			self::POST_TYPE,
 			array(
 				'labels'             => array(
-					'name'          => __( 'Reminders', 'team-email-reminder' ),
-					'singular_name' => __( 'Reminder', 'team-email-reminder' ),
+					'name'          => __( 'Reminders', 'team-reminder-for-clubs' ),
+					'singular_name' => __( 'Reminder', 'team-reminder-for-clubs' ),
 				),
 				'public'            => false,
 				'show_ui'           => false,

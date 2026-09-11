@@ -16,7 +16,7 @@ class NEUTCOMP_TER_Reminder_Cron {
 	public static function add_schedule( $schedules ) {
 		$schedules['ter_every_thirty_minutes'] = array(
 			'interval' => 30 * MINUTE_IN_SECONDS,
-			'display'  => __( 'Every 30 minutes', 'team-email-reminder' ),
+			'display'  => __( 'Every 30 minutes', 'team-reminder-for-clubs' ),
 		);
 
 		return $schedules;
