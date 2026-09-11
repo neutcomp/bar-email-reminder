@@ -29,7 +29,7 @@ class NEUTCOMP_TER_Reminder_Admin {
 			self::PAGE,
 			array( __CLASS__, 'render' ),
 			'dashicons-email-alt',
-			25
+			100
 		);
 		add_submenu_page(
 			self::PAGE,
