@@ -66,6 +66,27 @@ class NEUTCOMP_TER_Reminder_Post_Type {
 		}
 	}
 
+	public static function get_all() {
+		$reminder_ids = get_posts(
+			array(
+				'post_type'      => self::POST_TYPE,
+				'post_status'    => 'any',
+				'posts_per_page' => -1,
+				'orderby'        => 'meta_value',
+				'order'          => 'ASC',
+				'meta_key'       => self::DATE_META,
+				'fields'         => 'ids',
+			)
+		);
+		$reminders = array();
+
+		foreach ( $reminder_ids as $reminder_id ) {
+			$reminders[] = self::get( $reminder_id );
+		}
+
+		return $reminders;
+	}
+
 	public static function get_emails( $value ) {
 		$emails = array_map( 'trim', explode( ';', (string) $value ) );
 		$emails = array_filter( $emails );

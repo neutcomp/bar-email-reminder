@@ -25,9 +25,10 @@ Features include:
 * Track reminders as not sent, sent, or missed.
 * Delete multiple reminders at once.
 * Customize the sender address, subject, email message, and notification delay.
-* Use the `[schedule]` shortcode to display reminders in a public table.
+* Use the `[neutcomp-schedule]` shortcode to display reminders in a public table.
 * Display one or two date and team columns with the `split="true"` attribute.
 * Display numeric dates with the `dateFormat="short"` attribute.
+* Export all teams and reminders to CSV and import a generated file to replace the data set.
 * Support English and Dutch based on the WordPress site language.
 
 The email message supports the following placeholders:
@@ -42,13 +43,23 @@ The plugin uses the site's configured timezone for date validation, display, and
 
 1. Upload the `team-email-reminder` directory to the `/wp-content/plugins/` directory, or install the plugin through the WordPress Plugins screen.
 2. Activate the plugin through the Plugins screen in WordPress.
-3. Open **Reminders** in the WordPress administration menu.
-4. Open **Teams** and add at least one team with one or more valid email addresses.
+3. Open **Settings > Team Email Reminder** to manage email settings and CSV import/export.
+4. Open **Reminders** and **Teams** to manage reminders and add at least one team with one or more valid email addresses.
 5. Create a reminder and assign it to a team.
-6. Optionally open **Email settings** to customize the sender, subject, message, and notification delay.
-7. Add `[schedule]` to a post or page to display the reminders publicly.
+6. Optionally open the Email settings tab to customize the sender, subject, message, and notification delay.
+7. Add `[neutcomp-schedule]` to a post or page to display the reminders publicly.
 
 For reliable email delivery, configure WordPress with a suitable SMTP or transactional email provider.
+
+== Import / Export ==
+
+The plugin includes a CSV import/export feature under **Settings > Team Email Reminder > Import / Export**.
+
+* Export creates a file named `club-team-emailreminder-[dd-mm-yyyy].csv`.
+* The export includes both teams and reminders.
+* Import accepts the generated CSV and replaces all existing teams and reminders with the imported data.
+
+This is useful for backup/restore or moving the plugin data between environments.
 
 == Frequently Asked Questions ==
 
@@ -70,11 +81,11 @@ Yes. Separate multiple email addresses with semicolons in the team email field.
 
 = How do I change the email content? =
 
-Open **Reminders > Email settings** in the WordPress administration area. You can change the sender address, subject, and message. The message supports `{name}`, `{team}`, and `{date}` placeholders.
+Open **Settings > Team Email Reminder > Email settings** in the WordPress administration area. You can change the sender address, subject, and message. The message supports `{name}`, `{team}`, and `{date}` placeholders.
 
 = How do I display reminders on a page? =
 
-Add `[schedule]` to the page or post. Use `[schedule split="true"]` for two date and team pairs per row, or `[schedule dateFormat="short"]` for numeric dates.
+Add `[neutcomp-schedule]` to the page or post. Use `[neutcomp-schedule split="true"]` for two date and team pairs per row, or `[neutcomp-schedule dateFormat="short"]` for numeric dates.
 
 = Which languages are supported? =
 
@@ -113,7 +124,8 @@ The email settings screen.
 * Added reminder and team management.
 * Added scheduled email notifications.
 * Added customizable email settings.
-* Added the `[schedule]` shortcode.
+* Added the `[neutcomp-schedule]` shortcode.
+* Added CSV import/export for teams and reminders.
 * Added English and Dutch translations.
 
 == Upgrade Notice ==
