@@ -20,10 +20,14 @@ jobs:
         local-dir: ./
         server-dir: ./httpdocs/wp-content/plugins/team-reminder-for-clubs/
         exclude: |
-          *.git
-          *.github
-          *node_modules
-          *scss
+          **/.git
+          **/.git/**
+          **/.github
+          **/.github/**
+          **/node_modules
+          **/node_modules/**
+          **/scss
+          **/scss/**
           package.json
           package-lock.json
           .gitignore
