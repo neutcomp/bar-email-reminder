@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class TER_Reminder_Post_Type {
+class NEUTCOMP_TER_Reminder_Post_Type {
 	const POST_TYPE = 'ter_reminder';
 
 	const NAME_META   = '_ter_name';

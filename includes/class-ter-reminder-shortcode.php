@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class TER_Reminder_Shortcode {
+class NEUTCOMP_TER_Reminder_Shortcode {
 	public static function init() {
 		add_shortcode( 'schedule', array( __CLASS__, 'render' ) );
 	}
@@ -15,7 +15,7 @@ class TER_Reminder_Shortcode {
 		$date_format = 'short' === strtolower( (string) $atts['dateformat'] ) ? 'short' : 'long';
 		$reminder_ids = get_posts(
 			array(
-				'post_type'      => TER_Reminder_Post_Type::POST_TYPE,
+				'post_type'      => NEUTCOMP_TER_Reminder_Post_Type::POST_TYPE,
 				'post_status'    => 'any',
 				'posts_per_page' => -1,
 				'fields'         => 'ids',
@@ -24,7 +24,7 @@ class TER_Reminder_Shortcode {
 		$reminders = array();
 
 		foreach ( $reminder_ids as $reminder_id ) {
-			$reminder = TER_Reminder_Post_Type::get( $reminder_id );
+			$reminder = NEUTCOMP_TER_Reminder_Post_Type::get( $reminder_id );
 			$date     = DateTimeImmutable::createFromFormat( '!Y-m-d', $reminder['date'], wp_timezone() );
 
 			if ( ! $date || $date->format( 'Y-m-d' ) !== $reminder['date'] ) {

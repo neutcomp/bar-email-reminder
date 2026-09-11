@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class TER_Reminder_Mailer {
+class NEUTCOMP_TER_Reminder_Mailer {
 	const SETTINGS_OPTION = 'ter_reminder_email_settings';
 
 	public static function get_settings() {
@@ -21,7 +21,7 @@ class TER_Reminder_Mailer {
 	public static function send( $reminder ) {
 		$date = DateTimeImmutable::createFromFormat( '!Y-m-d', $reminder['date'], wp_timezone() );
 		$date = $date ? $date->format( 'd-m-Y' ) : $reminder['date'];
-		$team = ! empty( $reminder['team_id'] ) && TER_Team_Post_Type::POST_TYPE === get_post_type( $reminder['team_id'] ) ? TER_Team_Post_Type::get( $reminder['team_id'] )['name'] : '';
+		$team = ! empty( $reminder['team_id'] ) && NEUTCOMP_TER_Team_Post_Type::POST_TYPE === get_post_type( $reminder['team_id'] ) ? NEUTCOMP_TER_Team_Post_Type::get( $reminder['team_id'] )['name'] : '';
 		$settings = self::get_settings();
 		$replacements = array(
 			'{name}' => $reminder['name'],
@@ -41,10 +41,10 @@ class TER_Reminder_Mailer {
 	}
 
 	public static function get_recipients( $reminder ) {
-		if ( ! empty( $reminder['team_id'] ) && TER_Team_Post_Type::POST_TYPE === get_post_type( $reminder['team_id'] ) ) {
-			return TER_Team_Post_Type::get_emails( $reminder['team_id'] );
+		if ( ! empty( $reminder['team_id'] ) && NEUTCOMP_TER_Team_Post_Type::POST_TYPE === get_post_type( $reminder['team_id'] ) ) {
+			return NEUTCOMP_TER_Team_Post_Type::get_emails( $reminder['team_id'] );
 		}
 
-		return TER_Reminder_Post_Type::get_emails( $reminder['email'] );
+		return NEUTCOMP_TER_Reminder_Post_Type::get_emails( $reminder['email'] );
 	}
 }

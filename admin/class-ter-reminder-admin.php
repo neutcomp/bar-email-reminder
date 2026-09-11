@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class TER_Reminder_Admin {
+class NEUTCOMP_TER_Reminder_Admin {
 	const PAGE = 'ter-reminders';
 	const TEAMS_PAGE = 'ter-reminder-teams';
 	const SETTINGS_PAGE = 'ter-reminder-settings';
@@ -59,22 +59,22 @@ class TER_Reminder_Admin {
 			check_admin_referer( 'ter_edit_reminder' );
 			$edit_id = absint( $_GET['edit'] );
 		}
-		$editing  = $edit_id ? TER_Reminder_Post_Type::get( $edit_id ) : array(
+		$editing  = $edit_id ? NEUTCOMP_TER_Reminder_Post_Type::get( $edit_id ) : array(
 			'id'     => 0,
 			'name'   => '',
 			'team_id' => 0,
 			'date'   => '',
 			'status' => 'not-sent',
 		);
-		$teams = TER_Team_Post_Type::get_all();
+		$teams = NEUTCOMP_TER_Team_Post_Type::get_all();
 		$reminder_ids = get_posts(
 			array(
-				'post_type'      => TER_Reminder_Post_Type::POST_TYPE,
+				'post_type'      => NEUTCOMP_TER_Reminder_Post_Type::POST_TYPE,
 				'post_status'    => 'any',
 				'posts_per_page' => -1,
 				'orderby'        => 'meta_value',
 				'order'          => 'ASC',
-				'meta_key'       => TER_Reminder_Post_Type::DATE_META,
+				'meta_key'       => NEUTCOMP_TER_Reminder_Post_Type::DATE_META,
 				'fields'         => 'ids',
 			)
 		);
@@ -119,7 +119,7 @@ class TER_Reminder_Admin {
 				<tbody>
 				<?php if ( ! $reminder_ids ) : ?>
 					<tr><td colspan="6"><?php esc_html_e( 'No reminders found.', 'team-email-reminder' ); ?></td></tr>
-				<?php else : foreach ( $reminder_ids as $reminder_id ) : $reminder = TER_Reminder_Post_Type::get( $reminder_id ); ?>
+				<?php else : foreach ( $reminder_ids as $reminder_id ) : $reminder = NEUTCOMP_TER_Reminder_Post_Type::get( $reminder_id ); ?>
 					<tr>
 						<td class="check-column">
 							<?php
@@ -157,19 +157,19 @@ class TER_Reminder_Admin {
 			self::redirect( $reminder_id, 'error' );
 		}
 
-		$is_update = $reminder_id && TER_Reminder_Post_Type::POST_TYPE === get_post_type( $reminder_id );
+		$is_update = $reminder_id && NEUTCOMP_TER_Reminder_Post_Type::POST_TYPE === get_post_type( $reminder_id );
 
 		if ( $is_update ) {
 			$post_id = $reminder_id;
 		} else {
-			$post_id = wp_insert_post( array( 'post_type' => TER_Reminder_Post_Type::POST_TYPE, 'post_status' => 'private', 'post_title' => $fields['name'] ), true );
+			$post_id = wp_insert_post( array( 'post_type' => NEUTCOMP_TER_Reminder_Post_Type::POST_TYPE, 'post_status' => 'private', 'post_title' => $fields['name'] ), true );
 		}
 
 		if ( is_wp_error( $post_id ) ) {
 			self::redirect( 0, 'error' );
 		}
 
-		TER_Reminder_Post_Type::save( $post_id, $fields );
+		NEUTCOMP_TER_Reminder_Post_Type::save( $post_id, $fields );
 		self::redirect( $is_update ? $post_id : 0, 'saved' );
 	}
 
@@ -180,8 +180,8 @@ class TER_Reminder_Admin {
 			check_admin_referer( 'ter_edit_team' );
 			$edit_id = absint( $_GET['edit'] );
 		}
-		$editing = $edit_id ? TER_Team_Post_Type::get( $edit_id ) : array( 'id' => 0, 'name' => '', 'email' => '' );
-		$teams   = TER_Team_Post_Type::get_all();
+		$editing = $edit_id ? NEUTCOMP_TER_Team_Post_Type::get( $edit_id ) : array( 'id' => 0, 'name' => '', 'email' => '' );
+		$teams   = NEUTCOMP_TER_Team_Post_Type::get_all();
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Teams', 'team-email-reminder' ); ?></h1>
@@ -226,18 +226,18 @@ class TER_Reminder_Admin {
 		);
 		$team_id = isset( $_POST['team_id'] ) ? absint( $_POST['team_id'] ) : 0;
 
-		if ( ! $fields['name'] || ! TER_Reminder_Post_Type::get_emails( $fields['email'] ) ) {
+		if ( ! $fields['name'] || ! NEUTCOMP_TER_Reminder_Post_Type::get_emails( $fields['email'] ) ) {
 			self::team_redirect( $team_id, 'error' );
 		}
 
-		$is_update = $team_id && TER_Team_Post_Type::POST_TYPE === get_post_type( $team_id );
-		$post_id   = $is_update ? $team_id : wp_insert_post( array( 'post_type' => TER_Team_Post_Type::POST_TYPE, 'post_status' => 'private', 'post_title' => $fields['name'] ), true );
+		$is_update = $team_id && NEUTCOMP_TER_Team_Post_Type::POST_TYPE === get_post_type( $team_id );
+		$post_id   = $is_update ? $team_id : wp_insert_post( array( 'post_type' => NEUTCOMP_TER_Team_Post_Type::POST_TYPE, 'post_status' => 'private', 'post_title' => $fields['name'] ), true );
 
 		if ( is_wp_error( $post_id ) ) {
 			self::team_redirect( 0, 'error' );
 		}
 
-		TER_Team_Post_Type::save( $post_id, $fields );
+		NEUTCOMP_TER_Team_Post_Type::save( $post_id, $fields );
 		self::team_redirect( $is_update ? $post_id : 0, 'team-saved' );
 	}
 
@@ -248,13 +248,13 @@ class TER_Reminder_Admin {
 
 		$linked_reminders = get_posts(
 			array(
-				'post_type'      => TER_Reminder_Post_Type::POST_TYPE,
+				'post_type'      => NEUTCOMP_TER_Reminder_Post_Type::POST_TYPE,
 				'post_status'    => 'any',
 				'posts_per_page' => 1,
 				'fields'         => 'ids',
 				'meta_query'     => array(
 					array(
-						'key'   => TER_Reminder_Post_Type::TEAM_META,
+						'key'   => NEUTCOMP_TER_Reminder_Post_Type::TEAM_META,
 						'value' => $team_id,
 					),
 				),
@@ -265,7 +265,7 @@ class TER_Reminder_Admin {
 			self::team_redirect( 0, 'team-in-use' );
 		}
 
-		if ( TER_Team_Post_Type::POST_TYPE === get_post_type( $team_id ) ) {
+		if ( NEUTCOMP_TER_Team_Post_Type::POST_TYPE === get_post_type( $team_id ) ) {
 			wp_delete_post( $team_id, true );
 		}
 
@@ -277,7 +277,7 @@ class TER_Reminder_Admin {
 		$reminder_id = isset( $_GET['reminder_id'] ) ? absint( $_GET['reminder_id'] ) : 0;
 		check_admin_referer( 'ter_delete_reminder_' . $reminder_id );
 
-		if ( TER_Reminder_Post_Type::POST_TYPE === get_post_type( $reminder_id ) ) {
+		if ( NEUTCOMP_TER_Reminder_Post_Type::POST_TYPE === get_post_type( $reminder_id ) ) {
 			wp_delete_post( $reminder_id, true );
 		}
 
@@ -292,7 +292,7 @@ class TER_Reminder_Admin {
 		$deleted      = 0;
 
 		foreach ( $reminder_ids as $reminder_id ) {
-			if ( TER_Reminder_Post_Type::POST_TYPE === get_post_type( $reminder_id ) && wp_delete_post( $reminder_id, true ) ) {
+			if ( NEUTCOMP_TER_Reminder_Post_Type::POST_TYPE === get_post_type( $reminder_id ) && wp_delete_post( $reminder_id, true ) ) {
 				$deleted++;
 			}
 		}
@@ -303,13 +303,13 @@ class TER_Reminder_Admin {
 	public static function run_cron() {
 		self::check_access();
 		check_admin_referer( 'ter_run_cron' );
-		TER_Reminder_Cron::process();
+		NEUTCOMP_TER_Reminder_Cron::process();
 		self::redirect( 0, 'cron-run' );
 	}
 
 	public static function render_settings() {
 		self::check_access();
-		$settings = TER_Reminder_Mailer::get_settings();
+		$settings = NEUTCOMP_TER_Reminder_Mailer::get_settings();
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Email settings', 'team-email-reminder' ); ?></h1>
@@ -370,7 +370,7 @@ class TER_Reminder_Admin {
 		}
 
 		update_option(
-			TER_Reminder_Mailer::SETTINGS_OPTION,
+			NEUTCOMP_TER_Reminder_Mailer::SETTINGS_OPTION,
 			array(
 				'from_email'    => $from_email,
 				'subject'       => $subject,
@@ -424,15 +424,15 @@ class TER_Reminder_Admin {
 	}
 
 	private static function is_valid_team( $team_id ) {
-		return $team_id && TER_Team_Post_Type::POST_TYPE === get_post_type( $team_id ) && TER_Team_Post_Type::get_emails( $team_id );
+		return $team_id && NEUTCOMP_TER_Team_Post_Type::POST_TYPE === get_post_type( $team_id ) && NEUTCOMP_TER_Team_Post_Type::get_emails( $team_id );
 	}
 
 	private static function get_team_name( $team_id ) {
-		if ( ! $team_id || TER_Team_Post_Type::POST_TYPE !== get_post_type( $team_id ) ) {
+		if ( ! $team_id || NEUTCOMP_TER_Team_Post_Type::POST_TYPE !== get_post_type( $team_id ) ) {
 			return __( 'Unknown team', 'team-email-reminder' );
 		}
 
-		return TER_Team_Post_Type::get( $team_id )['name'];
+		return NEUTCOMP_TER_Team_Post_Type::get( $team_id )['name'];
 	}
 
 	private static function is_date( $date ) {

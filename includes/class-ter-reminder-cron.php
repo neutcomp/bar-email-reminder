@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class TER_Reminder_Cron {
+class NEUTCOMP_TER_Reminder_Cron {
 	const HOOK = 'ter_process_reminders';
 	const LOCK = 'ter_process_reminders_lock';
 
@@ -23,7 +23,7 @@ class TER_Reminder_Cron {
 	}
 
 	public static function activate() {
-		TER_Reminder_Post_Type::register();
+		NEUTCOMP_TER_Reminder_Post_Type::register();
 
 		if ( ! wp_next_scheduled( self::HOOK ) ) {
 			wp_schedule_event( time(), 'ter_every_thirty_minutes', self::HOOK );
@@ -47,11 +47,11 @@ class TER_Reminder_Cron {
 
 		try {
 			$today       = new DateTimeImmutable( 'now', wp_timezone() );
-			$settings    = TER_Reminder_Mailer::get_settings();
+			$settings    = NEUTCOMP_TER_Reminder_Mailer::get_settings();
 			$send_date   = $today->modify( '+' . absint( $settings['reminder_days'] ) . ' days' )->format( 'Y-m-d' );
 			$reminder_ids = get_posts(
 				array(
-					'post_type'      => TER_Reminder_Post_Type::POST_TYPE,
+					'post_type'      => NEUTCOMP_TER_Reminder_Post_Type::POST_TYPE,
 					'post_status'    => 'any',
 					'posts_per_page' => -1,
 					'fields'         => 'ids',
@@ -59,14 +59,14 @@ class TER_Reminder_Cron {
 			);
 
 			foreach ( $reminder_ids as $reminder_id ) {
-				$reminder = TER_Reminder_Post_Type::get( $reminder_id );
+				$reminder = NEUTCOMP_TER_Reminder_Post_Type::get( $reminder_id );
 
-				if ( 'not-sent' !== $reminder['status'] || ! self::is_valid_date( $reminder['date'] ) || ! TER_Reminder_Mailer::get_recipients( $reminder ) ) {
+				if ( 'not-sent' !== $reminder['status'] || ! self::is_valid_date( $reminder['date'] ) || ! NEUTCOMP_TER_Reminder_Mailer::get_recipients( $reminder ) ) {
 					continue;
 				}
 
 				if ( $reminder['date'] < $send_date ) {
-					update_post_meta( $reminder_id, TER_Reminder_Post_Type::STATUS_META, 'missed' );
+					update_post_meta( $reminder_id, NEUTCOMP_TER_Reminder_Post_Type::STATUS_META, 'missed' );
 					continue;
 				}
 
@@ -74,8 +74,8 @@ class TER_Reminder_Cron {
 					continue;
 				}
 
-				if ( TER_Reminder_Mailer::send( $reminder ) ) {
-					update_post_meta( $reminder_id, TER_Reminder_Post_Type::STATUS_META, 'sent' );
+				if ( NEUTCOMP_TER_Reminder_Mailer::send( $reminder ) ) {
+					update_post_meta( $reminder_id, NEUTCOMP_TER_Reminder_Post_Type::STATUS_META, 'sent' );
 				}
 			}
 		} finally {

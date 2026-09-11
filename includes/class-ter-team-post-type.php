@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class TER_Team_Post_Type {
+class NEUTCOMP_TER_Team_Post_Type {
 	const POST_TYPE = 'ter_team';
 
 	const NAME_META  = '_ter_team_name';
@@ -65,12 +65,12 @@ class TER_Team_Post_Type {
 	public static function get_emails( $team_id ) {
 		$team = self::get( $team_id );
 
-		return TER_Reminder_Post_Type::get_emails( $team['email'] );
+		return NEUTCOMP_TER_Reminder_Post_Type::get_emails( $team['email'] );
 	}
 
 	public static function save( $post_id, $fields ) {
 		$name   = sanitize_text_field( $fields['name'] );
-		$emails = implode( ';', TER_Reminder_Post_Type::get_emails( $fields['email'] ) );
+		$emails = implode( ';', NEUTCOMP_TER_Reminder_Post_Type::get_emails( $fields['email'] ) );
 
 		wp_update_post( array( 'ID' => $post_id, 'post_title' => $name ) );
 		update_post_meta( $post_id, self::NAME_META, $name );
