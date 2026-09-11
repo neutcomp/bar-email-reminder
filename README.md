@@ -17,23 +17,23 @@ Team Email Reminder is a small WordPress plugin for managing dated email reminde
 - Includes an administrator button to run the reminder check immediately.
 - Includes an Email Settings page where administrators can change the From address, subject, message, and notification delay.
 - The email message uses the WordPress HTML editor and supports safe formatting such as bold text.
-- Provides a `[schedule]` shortcode for displaying a public table with the date and name of each reminder.
+- Provides a `[neutcomp-schedule]` shortcode for displaying a public table with the date and name of each reminder.
 - Supports English and Dutch based on the WordPress site language.
 
 The email template supports `{name}`, `{team}`, and `{date}` placeholders. The date placeholder is formatted as `dd-mm-yyyy`.
 
 ## Shortcode
 
-Add `[schedule]` to a post or page. It displays reminders sorted by date with a Dutch date format such as `Donderdag 10 augustus`. Add `split="true"` to display two date/team pairs next to each other:
+Add `[neutcomp-schedule]` to a post or page. It displays reminders sorted by date with a Dutch date format such as `Donderdag 10 augustus`. Add `split="true"` to display two date/team pairs next to each other:
 
 ```text
-[schedule split="true"]
+[neutcomp-schedule split="true"]
 ```
 
 Use `dateFormat="short"` for numeric dates in `dd-mm-yyyy` format. Parameters can be combined:
 
 ```text
-[schedule split="true" dateFormat="short"]
+[neutcomp-schedule split="true" dateFormat="short"]
 ```
 
 ## Installation

@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class NEUTCOMP_TER_Reminder_Shortcode {
 	public static function init() {
-		add_shortcode( 'schedule', array( __CLASS__, 'render' ) );
+		add_shortcode( 'neutcomp-schedule', array( __CLASS__, 'render' ) );
 	}
 
 	public static function render( $atts ) {
-		$atts        = shortcode_atts( array( 'split' => 'false', 'dateformat' => 'long' ), $atts, 'schedule' );
+		$atts        = shortcode_atts( array( 'split' => 'false', 'dateformat' => 'long' ), $atts, 'neutcomp-schedule' );
 		$split       = 'true' === strtolower( (string) $atts['split'] );
 		$date_format = 'short' === strtolower( (string) $atts['dateformat'] ) ? 'short' : 'long';
 		$reminder_ids = get_posts(
